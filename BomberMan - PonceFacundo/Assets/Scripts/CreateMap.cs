@@ -24,9 +24,9 @@ public class CreateMap : MonoBehaviour
         {
             for (int j = 0; j < maxHeight; j++)
             {
-                map[i,j] = Instantiate(refFloor, new Vector3(initialPos.x + (i * scaleTileX),-0.5f, initialPos.z + (j * scaleTileZ)), 
-                    Quaternion.identity, transform);
-                //map[i,j].GetComponent<MeshRenderer>().material.color = colorFloor;
+                map[i,j] = Instantiate(refFloor, new Vector3(initialPos.x + (i * scaleTileX), 0.0f, initialPos.z + (j * scaleTileZ)),
+                    refFloor.transform.localRotation, transform);
+                map[i,j].GetComponent<MeshRenderer>().material.color = colorFloor;
             }
         }
     }

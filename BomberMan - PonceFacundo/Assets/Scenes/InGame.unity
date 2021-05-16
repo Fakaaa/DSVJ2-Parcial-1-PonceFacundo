@@ -369,8 +369,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d302419231d0f45a76fd0473ace355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxWidth: 10
-  maxHeight: 10
+  maxWidth: 20
+  maxHeight: 20
   colorFloor: {r: 0.3921569, g: 0.73333335, b: 0.18431373, a: 1}
-  refFloor: {fileID: 8855288523200555061, guid: aeb71a98a1cc56648a9709f12c9a2a70,
+  refFloor: {fileID: 4780667069936319409, guid: 51ac45f0379f6e24eb4c9cb89dbfded0,
     type: 3}
