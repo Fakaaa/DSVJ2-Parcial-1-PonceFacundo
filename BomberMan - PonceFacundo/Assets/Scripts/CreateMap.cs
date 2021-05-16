@@ -44,6 +44,15 @@ public class CreateMap : MonoBehaviour
             }
         }
 
+        for (int i = 1; i < maxWidth * 0.4f; i++)
+        {
+            for (int j = 1; j < maxHeight * 0.4f; j++)
+            {
+                walls[i, j] = Instantiate(refWallUnBreakable, new Vector3(initialPos.x + (i * (scaleTileX*2.1f)), 0.5f, initialPos.z + (j * (scaleTileZ* 2.1f))),
+                    refFloor.transform.localRotation, transform);
+            }
+        }
+
         for (int i = 0; i < maxWidth; i++)
         {
             for (int j = 0; j < maxHeight; j++)
