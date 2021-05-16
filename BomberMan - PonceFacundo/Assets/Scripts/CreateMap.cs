@@ -4,17 +4,20 @@ public class CreateMap : MonoBehaviour
 {   
     [SerializeField] public int maxWidth; 
     [SerializeField] public int maxHeight;
-    [SerializeField] public Color colorFloor;
 
     [SerializeField] public GameObject refFloor;
+    [SerializeField] public GameObject refWallBreakable;
+    [SerializeField] public GameObject refWallUnBreakable;
 
-    private GameObject[,] map;
+    private GameObject[,] floor;
+    private GameObject[,] walls;
     private float scaleTileX;
     private float scaleTileZ;
     public void Start()
     {
         GameObject [,] mapAux = new GameObject[maxWidth , maxHeight];
-        map = mapAux;
+        floor = mapAux;
+        walls = mapAux;
         scaleTileX = refFloor.transform.localScale.x;
         scaleTileZ = refFloor.transform.localScale.z;
 
@@ -22,11 +25,31 @@ public class CreateMap : MonoBehaviour
 
         for (int i = 0; i < maxWidth; i++)
         {
+            walls[i,0] = Instantiate(refWallUnBreakable, new Vector3(initialPos.x + (i * scaleTileX), 0.5f, initialPos.z + (0 * scaleTileZ)),
+                    refFloor.transform.localRotation, transform);
             for (int j = 0; j < maxHeight; j++)
             {
-                map[i,j] = Instantiate(refFloor, new Vector3(initialPos.x + (i * scaleTileX), 0.0f, initialPos.z + (j * scaleTileZ)),
+                walls[0, j] = Instantiate(refWallUnBreakable, new Vector3(initialPos.x + (0 * scaleTileX), 0.5f, initialPos.z + (j * scaleTileZ)),
                     refFloor.transform.localRotation, transform);
-                map[i,j].GetComponent<MeshRenderer>().material.color = colorFloor;
+            }
+        }
+        for (int i = 0; i < maxWidth; i++)
+        {
+            walls[i, maxHeight-1] = Instantiate(refWallUnBreakable, new Vector3(initialPos.x + (i * scaleTileX), 0.5f, initialPos.z + (maxHeight - 1 * scaleTileZ)),
+                    refFloor.transform.localRotation, transform);
+            for (int j = 0; j < maxHeight; j++)
+            {
+                walls[maxWidth-1, j] = Instantiate(refWallUnBreakable, new Vector3(initialPos.x + (maxWidth - 1 * scaleTileX), 0.5f, initialPos.z + (j * scaleTileZ)),
+                    refFloor.transform.localRotation, transform);
+            }
+        }
+
+        for (int i = 0; i < maxWidth; i++)
+        {
+            for (int j = 0; j < maxHeight; j++)
+            {
+                floor[i,j] = Instantiate(refFloor, new Vector3(initialPos.x + (i * scaleTileX), 0.0f, initialPos.z + (j * scaleTileZ)),
+                    refFloor.transform.localRotation, transform);
             }
         }
     }
