@@ -22,9 +22,9 @@ public class CreateMap : MonoBehaviour
     private float scaleTileZWalls;
 
     private float offsetBetweenWalls;
-    private float scaleFloorX;
-    private float scaleFloorY;
-    public void Start()
+    public static float scaleFloorX;
+    public static float scaleFloorY;
+    public void Awake()
     {
         offsetBetweenWalls = 2.0f;
         wallsCenter = new GameObject[maxWidth, maxHeight];
