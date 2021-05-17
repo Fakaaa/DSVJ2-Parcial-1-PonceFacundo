@@ -103,22 +103,30 @@ public class PlayerMovement : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.W) && canGoBack)
         {
-            moveVec = Vector3.left;
+            float aux = transform.position.z;
+            float clampZ = Mathf.Round(transform.position.z) - aux;
+            moveVec = new Vector3(-1,0, clampZ);
             playerDirection = MoveDirection.Back;
         }
         else if (Input.GetKey(KeyCode.S) && canGoFront)
         {
-            moveVec = Vector3.right;
+            float aux = transform.position.z;
+            float clampZ = Mathf.Round(transform.position.z) - aux;
+            moveVec = new Vector3( 1, 0, clampZ);
             playerDirection = MoveDirection.Front;
         }
         else if (Input.GetKey(KeyCode.A) && canGoLeft)
         {
-            moveVec = Vector3.back;
+            float aux = transform.position.x;
+            float clampX = Mathf.Round(transform.position.x) - aux;
+            moveVec = new Vector3(clampX, 0, -1);
             playerDirection = MoveDirection.Left;
         }
         else if (Input.GetKey(KeyCode.D) && canGoRight)
         {
-            moveVec = Vector3.forward;
+            float aux = transform.position.x;
+            float clampX = Mathf.Round(transform.position.x) - aux;
+            moveVec = new Vector3(clampX, 0, 1);
             playerDirection = MoveDirection.Right;
         }
         else
