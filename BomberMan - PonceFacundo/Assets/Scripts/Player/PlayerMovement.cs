@@ -5,7 +5,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public int lifes;
     [SerializeField] public float playerSpeed;
     [SerializeField] public bool isAlive;
-    [SerializeField] public GameObject fantasmitaPapa;
+    [SerializeField] public GameObject ghostModel;
+    [SerializeField] public GameObject prefabBomb;
 
     private Vector3 moveVec;
     private Ray frontRay;
@@ -91,12 +92,7 @@ public class PlayerMovement : MonoBehaviour
     public void CheckRaycastDirection(ref Ray rayDirAndOrigin, ref RaycastHit my_HitInfo, ref bool disableMove)
     {
         if (Physics.Raycast(rayDirAndOrigin, out my_HitInfo, maxDistanceRaycasts))
-        {
-            if (my_HitInfo.collider.tag == "Unbreakable" || my_HitInfo.collider.tag == "Breakable")
-            {
-                disableMove = false;
-            }
-        }
+            disableMove = false;
         else
             disableMove = true;
     }
@@ -115,6 +111,11 @@ public class PlayerMovement : MonoBehaviour
             moveVec = Vector3.zero;
         }
 
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Instantiate(prefabBomb, transform.position, Quaternion.identity);
+        }
+
         if(moveVec == Vector3.zero)
             playerDirection = MoveDirection.None;
     }
@@ -126,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
         else
             moveVec = new Vector3(clamp, 0, direction);
 
-        fantasmitaPapa.transform.LookAt(transform.position + moveVec);
+        ghostModel.transform.LookAt(transform.position + moveVec);
         playerDirection = newDirection;
     }
 

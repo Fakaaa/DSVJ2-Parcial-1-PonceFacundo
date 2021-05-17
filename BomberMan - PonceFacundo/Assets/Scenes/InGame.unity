@@ -515,6 +515,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
+      propertyPath: ghostModel
+      value: 
+      objectReference: {fileID: 1873638183}
+    - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: prefabBomb
+      value: 
+      objectReference: {fileID: 7146198520973192429, guid: 1377f3f3eb3721245863e15594317908,
+        type: 3}
+    - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
       propertyPath: playerSpeed
       value: 5
       objectReference: {fileID: 0}
