@@ -16,6 +16,7 @@ public class CreateMap : MonoBehaviour
     [SerializeField] public GameObject refWallUnBreakable;
 
     private GameObject floor;
+    private GameObject[,] wallsCenterMap;
     private GameObject[] wallsOuterMap;
     private float scaleTileXWalls;
     private float scaleTileZWalls;
@@ -26,6 +27,7 @@ public class CreateMap : MonoBehaviour
     public void Awake()
     {
         offsetBetweenWalls = 2.0f;
+        wallsCenterMap = new GameObject[maxWidth, maxHeight];
         wallsOuterMap = new GameObject[4];
         scaleTileXWalls = refWallUnBreakable.transform.localScale.x;
         scaleTileZWalls = refWallUnBreakable.transform.localScale.z;
@@ -55,7 +57,7 @@ public class CreateMap : MonoBehaviour
             {
                 Vector3 posWallUnbreakable = new Vector3((initialPos.x + (i * scaleTileXWalls)) * offsetBetweenWalls, 0.5f,
                     (initialPos.z + (j * scaleTileZWalls)) * offsetBetweenWalls);
-                Instantiate(refWallUnBreakable, posWallUnbreakable, refFloor.transform.localRotation, transform);
+                wallsCenterMap[i,j] = Instantiate(refWallUnBreakable, posWallUnbreakable, refFloor.transform.localRotation, transform);
 
                 FindPlaceWallsBreakable(ref posWallUnbreakable, ref anotherRandIter, ref randIteration, i, j);
             }
@@ -86,7 +88,7 @@ public class CreateMap : MonoBehaviour
                     posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z);
             }
 
-            Instantiate(refWallBreakable, posWallBreakable, refFloor.transform.localRotation, transform);
+            wallsCenterMap[i, j] = Instantiate(refWallBreakable, posWallBreakable, refFloor.transform.localRotation, transform);
         }
     }
 }

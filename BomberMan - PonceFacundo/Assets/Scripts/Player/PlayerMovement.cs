@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public int lifes;
     [SerializeField] public float playerSpeed;
     [SerializeField] public bool isAlive;
+    [SerializeField] public GameObject fantasmitaPapa;
 
     private Vector3 moveVec;
     private Ray frontRay;
@@ -16,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Ray rightRay;
     private RaycastHit myHitRight;
 
-    enum MoveDirection
+    public enum MoveDirection
     {
         Front,
         Back,
@@ -36,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         maxDistanceRaycasts = 0.8f;
-        transform.position = new Vector3(CreateMap.scaleFloorX * 0.5f, 0.8f, CreateMap.scaleFloorY * 0.5f);
+        transform.position = new Vector3(CreateMap.scaleFloorX * 0.5f, 0.2f, CreateMap.scaleFloorY * 0.5f);
         moveVec = Vector3.zero;
         canGoFront = true;
         canGoBack = true;
@@ -102,39 +103,33 @@ public class PlayerMovement : MonoBehaviour
     public void InputPlayer()
     {
         if(Input.GetKey(KeyCode.W) && canGoBack)
-        {
-            float aux = transform.position.z;
-            float clampZ = Mathf.Round(transform.position.z) - aux;
-            moveVec = new Vector3(-1,0, clampZ);
-            playerDirection = MoveDirection.Back;
-        }
+            ApplyDirection(transform.position.z, -1, MoveDirection.Back);
         else if (Input.GetKey(KeyCode.S) && canGoFront)
-        {
-            float aux = transform.position.z;
-            float clampZ = Mathf.Round(transform.position.z) - aux;
-            moveVec = new Vector3( 1, 0, clampZ);
-            playerDirection = MoveDirection.Front;
-        }
+            ApplyDirection(transform.position.z, 1, MoveDirection.Front);
         else if (Input.GetKey(KeyCode.A) && canGoLeft)
-        {
-            float aux = transform.position.x;
-            float clampX = Mathf.Round(transform.position.x) - aux;
-            moveVec = new Vector3(clampX, 0, -1);
-            playerDirection = MoveDirection.Left;
-        }
+            ApplyDirection(transform.position.x, -1, MoveDirection.Left);
         else if (Input.GetKey(KeyCode.D) && canGoRight)
-        {
-            float aux = transform.position.x;
-            float clampX = Mathf.Round(transform.position.x) - aux;
-            moveVec = new Vector3(clampX, 0, 1);
-            playerDirection = MoveDirection.Right;
-        }
+            ApplyDirection(transform.position.x, 1, MoveDirection.Right);
         else
+        {
             moveVec = Vector3.zero;
+        }
 
         if(moveVec == Vector3.zero)
             playerDirection = MoveDirection.None;
     }
+    public void ApplyDirection(float offsetToCenter, int direction, MoveDirection newDirection)
+    {
+        float clamp = Mathf.Round(offsetToCenter) - offsetToCenter;
+        if(newDirection == MoveDirection.Front || newDirection == MoveDirection.Back)
+            moveVec = new Vector3(direction, 0, clamp);
+        else
+            moveVec = new Vector3(clamp, 0, direction);
+
+        fantasmitaPapa.transform.LookAt(transform.position + moveVec);
+        playerDirection = newDirection;
+    }
+
     public void ReciveDamage()
     {
         lifes--;
