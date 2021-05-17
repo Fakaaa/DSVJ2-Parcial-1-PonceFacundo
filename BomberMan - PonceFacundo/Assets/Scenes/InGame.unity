@@ -369,9 +369,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d302419231d0f45a76fd0473ace355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxWidth: 20
-  maxHeight: 20
-  refFloor: {fileID: 4780667069936319409, guid: 51ac45f0379f6e24eb4c9cb89dbfded0,
+  maxWidth: 24
+  maxHeight: 30
+  refFloor: {fileID: 2953766458654175584, guid: 2b7644f8db2eb3943b373a80561fc7da,
     type: 3}
   refWallBreakable: {fileID: 2936030731935507285, guid: 065ce049cb5a55343860caa21549314a,
     type: 3}
