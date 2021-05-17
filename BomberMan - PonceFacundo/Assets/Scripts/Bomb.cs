@@ -8,6 +8,7 @@ public class Bomb : MonoBehaviour
     [SerializeField] public float timer;
     [SerializeField] public bool isActive;
     [SerializeField] public float radiusExplode;
+    [SerializeField] public GameObject prefabExplosion;
 
     public delegate void PlayerReciveDamage();
     public static PlayerReciveDamage playerHasBeenDamaged;
@@ -65,12 +66,18 @@ public class Bomb : MonoBehaviour
 
                     DrawRaysOnDebug();
 
+                    Quaternion leftSide = new Quaternion(-1,0,0,1);
+                    Quaternion rightSide = new Quaternion(1, 0, 0, 1);
+                    Quaternion frontSide = new Quaternion(0, 0, 1, 1);
+                    Quaternion backSide = new Quaternion(0, 0,-1, 1);
+                    Instantiate(prefabExplosion, transform.position + (transform.forward / 3.5f), frontSide);
+                    Instantiate(prefabExplosion, transform.position + (-transform.forward / 3.5f), backSide);
+                    Instantiate(prefabExplosion, transform.position + (transform.right / 3.5f), rightSide);
+                    Instantiate(prefabExplosion, transform.position + (-transform.right / 3.5f), leftSide);
+
                     DestroyWithRadius(ref frontRay, ref frontHit);
-
                     DestroyWithRadius(ref backRay, ref backHit);
-
                     DestroyWithRadius(ref leftRay, ref leftHit);
-
                     DestroyWithRadius(ref rightRay, ref rightHit);
 
                     isActive = false;

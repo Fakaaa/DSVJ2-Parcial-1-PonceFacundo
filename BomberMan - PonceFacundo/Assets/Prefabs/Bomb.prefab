@@ -271,6 +271,8 @@ MonoBehaviour:
   timer: 0
   isActive: 0
   radiusExplode: 2
+  prefabExplosion: {fileID: 2632573240618392901, guid: 89de84f39dc661449af71895697c422c,
+    type: 3}
 --- !u!1 &7146198521668416484
 GameObject:
   m_ObjectHideFlags: 0
