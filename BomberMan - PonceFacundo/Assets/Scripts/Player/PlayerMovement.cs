@@ -101,15 +101,15 @@ public class PlayerMovement : MonoBehaviour
     }
     public void InputPlayer()
     {
-        if(Input.GetKey(KeyCode.W) && canGoFront)
-        {
-            moveVec = Vector3.right;
-            playerDirection = MoveDirection.Front;
-        }
-        else if (Input.GetKey(KeyCode.S) && canGoBack)
+        if(Input.GetKey(KeyCode.W) && canGoBack)
         {
             moveVec = Vector3.left;
             playerDirection = MoveDirection.Back;
+        }
+        else if (Input.GetKey(KeyCode.S) && canGoFront)
+        {
+            moveVec = Vector3.right;
+            playerDirection = MoveDirection.Front;
         }
         else if (Input.GetKey(KeyCode.A) && canGoLeft)
         {
