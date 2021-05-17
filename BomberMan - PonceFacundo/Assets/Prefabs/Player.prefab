@@ -93,9 +93,10 @@ GameObject:
   - component: {fileID: 1267368141076999905}
   - component: {fileID: 853268777517932292}
   - component: {fileID: 1267368141076999909}
+  - component: {fileID: 5978901034026346513}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -204,15 +205,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 212a3b43331fd13458b51c5e2f01b5a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifes: 0
   playerSpeed: 0
-  isAlive: 0
-  fantasmitaPapa: {fileID: 6174485768353228955}
+  ghostModel: {fileID: 0}
+  prefabBomb: {fileID: 0}
   playerDirection: 0
   canGoFront: 0
   canGoBack: 0
   canGoLeft: 0
   canGoRight: 0
+--- !u!114 &5978901034026346513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267368141076999904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933f38c8aa39a91429a50857f7a4ab8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAlive: 0
+  lifes: 0
 --- !u!1 &1541916742731046727
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +554,7 @@ GameObject:
   - component: {fileID: 7199980161346886280}
   m_Layer: 0
   m_Name: banfieldghost Variant
-  m_TagString: Ghost
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

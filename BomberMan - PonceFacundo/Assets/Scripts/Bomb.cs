@@ -9,8 +9,16 @@ public class Bomb : MonoBehaviour
     [SerializeField] public bool isActive;
     [SerializeField] public float radiusExplode;
 
+    public delegate void PlayerReciveDamage();
+    public static PlayerReciveDamage playerHasBeenDamaged;
+
     private float timeTodestroyTrashObj;
     private float timerTrashObj;
+
+    private float timeForActiveTrigger;
+    private float timerToActiveCollision;
+
+    private bool isTrigger;
 
     private Ray leftRay;
     private Ray rightRay;
@@ -22,7 +30,10 @@ public class Bomb : MonoBehaviour
     private RaycastHit rightHit;
     public void Awake()
     {
-        timeTodestroyTrashObj = 1;
+        gameObject.GetComponent<SphereCollider>().isTrigger = true;
+        timeForActiveTrigger = 1;
+        isTrigger = true;
+        timeTodestroyTrashObj = 0.2f;
         isActive = true;
     }
     void Update()
@@ -31,38 +42,49 @@ public class Bomb : MonoBehaviour
     }
     public void CheckNearbyFoes()
     {
-        if(isActive)
-        {
-            if(timer <= timeToExplode)
-                timer += Time.deltaTime;
-            else
-            {
-                frontRay = new Ray(transform.position, transform.forward);
-                backRay = new Ray(transform.position, -transform.forward);
-                leftRay = new Ray(transform.position, -transform.right);
-                rightRay = new Ray(transform.position, transform.right);
-                
-                DrawRaysOnDebug();
-
-                DestroyWithRadius(ref frontRay,ref frontHit);
-
-                DestroyWithRadius(ref backRay,ref backHit);
-                
-                DestroyWithRadius(ref leftRay,ref leftHit);
-                
-                DestroyWithRadius(ref rightRay,ref rightHit);
-
-                isActive = false;
-                timer = 0;
-            }
-        }
+        if (timerToActiveCollision <= timeForActiveTrigger)
+            timerToActiveCollision += Time.deltaTime;
         else
         {
-            if (timerTrashObj <= timeTodestroyTrashObj)
-                timerTrashObj += Time.deltaTime;
+            gameObject.GetComponent<SphereCollider>().isTrigger = false;
+            isTrigger = false;
+        }
+
+        if (!isTrigger)
+        {
+            if (isActive)
+            {
+                if (timer <= timeToExplode)
+                    timer += Time.deltaTime;
+                else
+                {
+                    frontRay = new Ray(transform.position, transform.forward);
+                    backRay = new Ray(transform.position, -transform.forward);
+                    leftRay = new Ray(transform.position, -transform.right);
+                    rightRay = new Ray(transform.position, transform.right);
+
+                    DrawRaysOnDebug();
+
+                    DestroyWithRadius(ref frontRay, ref frontHit);
+
+                    DestroyWithRadius(ref backRay, ref backHit);
+
+                    DestroyWithRadius(ref leftRay, ref leftHit);
+
+                    DestroyWithRadius(ref rightRay, ref rightHit);
+
+                    isActive = false;
+                    timer = 0;
+                }
+            }
             else
             {
-                Destroy(gameObject);
+                if (timerTrashObj <= timeTodestroyTrashObj)
+                    timerTrashObj += Time.deltaTime;
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }
@@ -77,9 +99,13 @@ public class Bomb : MonoBehaviour
     {
         if (Physics.Raycast(direction, out hitInfo, radiusExplode))
         {
-            if (hitInfo.collider.tag != "Unbreakable")
+            if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
                 Destroy(hitInfo.collider.gameObject);
+            }
+            else if(hitInfo.collider.tag == "Player")
+            {
+                playerHasBeenDamaged?.Invoke();
             }
         }
     }

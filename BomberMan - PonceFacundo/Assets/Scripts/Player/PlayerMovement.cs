@@ -2,9 +2,7 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] public int lifes;
     [SerializeField] public float playerSpeed;
-    [SerializeField] public bool isAlive;
     [SerializeField] public GameObject ghostModel;
     [SerializeField] public GameObject prefabBomb;
 
@@ -131,14 +129,4 @@ public class PlayerMovement : MonoBehaviour
         playerDirection = newDirection;
     }
 
-    public void ReciveDamage()
-    {
-        lifes--;
-
-        if(lifes < 0)
-        {
-            lifes = 0;
-            isAlive = false;
-        }
-    }
 }

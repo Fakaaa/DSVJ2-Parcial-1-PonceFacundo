@@ -23,10 +23,13 @@ public class CameraFollow : MonoBehaviour
 
         zoom = new Vector3(zoomDistance, zoomUp, 0);
 
-        posToMoveTowards = lookAtThat.position + zoom;
+        if(lookAtThat != null)
+        {
+            posToMoveTowards = lookAtThat.position + zoom;
 
-        //transform.LookAt(lookAtThat, lookAtThat.up);
+            //transform.LookAt(lookAtThat, lookAtThat.up);
 
-        transform.position = Vector3.Lerp(myPos, posToMoveTowards, Vector3.Distance(myPos, posToMoveTowards) * Time.deltaTime * smothSpeed);
+            transform.position = Vector3.Lerp(myPos, posToMoveTowards, Vector3.Distance(myPos, posToMoveTowards) * Time.deltaTime * smothSpeed);
+        }
     }
 }

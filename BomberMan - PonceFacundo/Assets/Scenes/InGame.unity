@@ -534,6 +534,26 @@ PrefabInstance:
       propertyPath: fantasmitaPapa
       value: 
       objectReference: {fileID: 1873638183}
+    - target: {fileID: 2520032600243194209, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: lifes
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2520032600243194209, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: isAlive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: lifes
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: isAlive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7199980161346886280, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: m_LocalPosition.y
