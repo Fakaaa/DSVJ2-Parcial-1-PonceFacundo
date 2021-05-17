@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,39 +6,126 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float playerSpeed;
     [SerializeField] public bool isAlive;
 
-    private Ray mySideRay;
-    private Ray myFrontRay;
+    private Vector3 moveVec;
+    private Ray frontRay;
+    private RaycastHit myHitFront;
+    private Ray backRay;
+    private RaycastHit myHitBack;
+    private Ray leftRay;
+    private RaycastHit myHitLeft;
+    private Ray rightRay;
+    private RaycastHit myHitRight;
 
-    private Rigidbody myBody;
+    enum MoveDirection
+    {
+        Front,
+        Back,
+        Left,
+        Right,
+        None
+    }
+    [SerializeField] private MoveDirection playerDirection;
+
+    [SerializeField] private bool canGoFront;
+    [SerializeField] private bool canGoBack;
+    [SerializeField] private bool canGoLeft;
+    [SerializeField] private bool canGoRight;
+
+    private float maxDistanceRaycasts;
+
     void Start()
     {
-        transform.position = new Vector3(CreateMap.scaleFloorX * 0.5f, 1 , CreateMap.scaleFloorY * 0.5f);
-        myBody = gameObject.GetComponent<Rigidbody>();
+        maxDistanceRaycasts = 0.8f;
+        transform.position = new Vector3(CreateMap.scaleFloorX * 0.5f, 0.8f, CreateMap.scaleFloorY * 0.5f);
+        moveVec = Vector3.zero;
+        canGoFront = true;
+        canGoBack = true;
+        canGoLeft = true;
+        canGoRight = true;
+        frontRay = new Ray(transform.position, transform.right);
+        backRay = new Ray(transform.position, -transform.right);
+        leftRay = new Ray(transform.position, -transform.forward);
+        rightRay = new Ray(transform.position, transform.forward);
+        playerDirection = MoveDirection.None;
     }
 
     void Update()
     {
+        InputPlayer();
+
         MovePlayer();
     }
-
+    public void DrawRaysOnDebug()
+    {
+        Debug.DrawRay(frontRay.origin, frontRay.direction, Color.magenta);
+        Debug.DrawRay(backRay.origin, backRay.direction, Color.red);
+        Debug.DrawRay(leftRay.origin, leftRay.direction, Color.blue);
+        Debug.DrawRay(rightRay.origin, rightRay.direction, Color.green);
+    }
+    public void UpdateRaysFromPlayer()
+    {
+        frontRay = new Ray(transform.position, transform.right);
+        backRay = new Ray(transform.position, -transform.right);
+        leftRay = new Ray(transform.position, -transform.forward);
+        rightRay = new Ray(transform.position, transform.forward);
+    }
     public void MovePlayer()
     {
-        float xAxis = Input.GetAxisRaw("Vertical");
-        float zAxis = Input.GetAxisRaw("Horizontal");
-        Vector3 moveVec = new Vector3(-xAxis, 0, zAxis);
-        mySideRay = new Ray(transform.position, transform.right);
-        myFrontRay = new Ray(transform.position, transform.forward);
+        UpdateRaysFromPlayer();
 
-        Debug.DrawRay(mySideRay.origin, mySideRay.direction, Color.red);
-        Debug.DrawRay(myFrontRay.origin, myFrontRay.direction, Color.blue);
-        Debug.DrawRay(mySideRay.origin, -mySideRay.direction, Color.red);
-        Debug.DrawRay(myFrontRay.origin, -myFrontRay.direction, Color.blue);
+        DrawRaysOnDebug();
 
-        RaycastHit hitSides;
-        RaycastHit hitFront;
-        if(Physics.Raycast(myFrontRay, 1,))
+        CheckRaycastDirection(ref frontRay, ref myHitFront, ref canGoFront);
 
-        transform.Translate(moveVec * playerSpeed * Time.deltaTime);
+        CheckRaycastDirection(ref backRay, ref myHitBack, ref canGoBack);
+        
+        CheckRaycastDirection(ref leftRay, ref myHitLeft, ref canGoLeft);
+        
+        CheckRaycastDirection(ref rightRay, ref myHitRight, ref canGoRight);
+
+
+        if (playerDirection != MoveDirection.None)
+            transform.Translate(moveVec * playerSpeed * Time.deltaTime);
+    }
+    public void CheckRaycastDirection(ref Ray rayDirAndOrigin, ref RaycastHit my_HitInfo, ref bool disableMove)
+    {
+        if (Physics.Raycast(rayDirAndOrigin, out my_HitInfo, maxDistanceRaycasts))
+        {
+            if (my_HitInfo.collider.tag == "Unbreakable" || my_HitInfo.collider.tag == "Breakable")
+            {
+                disableMove = false;
+            }
+        }
+        else
+            disableMove = true;
+    }
+    public void InputPlayer()
+    {
+        if(Input.GetKey(KeyCode.W) && canGoFront)
+        {
+            moveVec = Vector3.right;
+            playerDirection = MoveDirection.Front;
+        }
+        else if (Input.GetKey(KeyCode.S) && canGoBack)
+        {
+            moveVec = Vector3.left;
+            playerDirection = MoveDirection.Back;
+        }
+        else if (Input.GetKey(KeyCode.A) && canGoLeft)
+        {
+            moveVec = Vector3.back;
+            playerDirection = MoveDirection.Left;
+        }
+        else if (Input.GetKey(KeyCode.D) && canGoRight)
+        {
+            moveVec = Vector3.forward;
+            playerDirection = MoveDirection.Right;
+        }
+        else
+            moveVec = Vector3.zero;
+
+        if(moveVec == Vector3.zero)
+            playerDirection = MoveDirection.None;
     }
     public void ReciveDamage()
     {

@@ -384,6 +384,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 853268777517932292, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1267368141076999904, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: m_Name
@@ -397,17 +402,17 @@ PrefabInstance:
     - target: {fileID: 1267368141076999908, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1267368141076999908, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 1267368141076999908, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1267368141076999908, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
@@ -452,6 +457,26 @@ PrefabInstance:
     - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: isAlive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: canGoBack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: canGoLeft
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: canGoFront
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: canGoRight
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1267368141076999909, guid: 4b149ccec57c1014581e0a021fa509c0,

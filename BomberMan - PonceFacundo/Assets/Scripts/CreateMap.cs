@@ -3,7 +3,7 @@
 public class CreateMap : MonoBehaviour
 {
     [SerializeField]
-    [Range(20, 32)]
+    [Range(13, 32)]
     [Tooltip("Recomendado: Multiplos de Dos")]
     public int maxWidth;
     [SerializeField]
@@ -16,7 +16,6 @@ public class CreateMap : MonoBehaviour
     [SerializeField] public GameObject refWallUnBreakable;
 
     private GameObject floor;
-    private GameObject[,] wallsCenter;
     private GameObject[] wallsOuterMap;
     private float scaleTileXWalls;
     private float scaleTileZWalls;
@@ -27,7 +26,6 @@ public class CreateMap : MonoBehaviour
     public void Awake()
     {
         offsetBetweenWalls = 2.0f;
-        wallsCenter = new GameObject[maxWidth, maxHeight];
         wallsOuterMap = new GameObject[4];
         scaleTileXWalls = refWallUnBreakable.transform.localScale.x;
         scaleTileZWalls = refWallUnBreakable.transform.localScale.z;
@@ -57,7 +55,7 @@ public class CreateMap : MonoBehaviour
             {
                 Vector3 posWallUnbreakable = new Vector3((initialPos.x + (i * scaleTileXWalls)) * offsetBetweenWalls, 0.5f,
                     (initialPos.z + (j * scaleTileZWalls)) * offsetBetweenWalls);
-                wallsCenter[i, j] = Instantiate(refWallUnBreakable, posWallUnbreakable, refFloor.transform.localRotation, transform);
+                Instantiate(refWallUnBreakable, posWallUnbreakable, refFloor.transform.localRotation, transform);
 
                 FindPlaceWallsBreakable(ref posWallUnbreakable, ref anotherRandIter, ref randIteration, i, j);
             }
@@ -74,17 +72,21 @@ public class CreateMap : MonoBehaviour
         if (anotherRandIter > 15)
             randIteration = Random.Range(0, 10);
 
-        Debug.Log("Random del random = " + anotherRandIter);
-
         if (randIteration > 5)
         {
             Vector3 posWallBreakable = Vector3.zero;
             if (anotherRandIter < 15)
-                posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z + scaleTileZWalls);
+            {
+                if((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z + scaleTileZWalls) != (scaleFloorY * 0.5f))
+                    posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z + scaleTileZWalls);
+            }
             else
-                posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z);
+            {
+                if ((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z) != (scaleFloorY * 0.5f))
+                    posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z);
+            }
 
-            wallsCenter[i, j] = Instantiate(refWallBreakable, posWallBreakable, refFloor.transform.localRotation, transform);
+            Instantiate(refWallBreakable, posWallBreakable, refFloor.transform.localRotation, transform);
         }
     }
 }
