@@ -3,11 +3,11 @@
 public class CreateMap : MonoBehaviour
 {
     [SerializeField]
-    [Range(13, 32)]
+    [Range(18, 102)]
     [Tooltip("Recomendado: Multiplos de Dos")]
     public int maxWidth;
     [SerializeField]
-    [Range(20, 32)]
+    [Range(20, 102)]
     [Tooltip("Recomendado: Multiplos de Dos")]
     public int maxHeight;
 
@@ -39,31 +39,31 @@ public class CreateMap : MonoBehaviour
         scaleFloorX = maxWidth;
         scaleFloorY = maxHeight;
 
-        Vector3 initialPos = new Vector3(0.5f, -0.5f, 0.5f);
-        float offsetOuterMap = 2.0f;
+        Vector3 initialPos = new Vector3(0.0f, -0.5f, 0.0f);
+        float offsetOuterMap = 1.0f;
 
-        wallsOuterMap[0] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX * 0.5f, 0.5f, 0.5f), refFloor.transform.localRotation, transform);
+        wallsOuterMap[0] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX * 0.5f, 0.5f, 0.0f), refFloor.transform.localRotation, transform);
         wallsOuterMap[0].transform.localScale = new Vector3(scaleFloorX - offsetOuterMap, 1, 1);
         wallsOuterMap[0].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(scaleFloorX * 0.5f, 1);
 
-        wallsOuterMap[1] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX * 0.5f, 0.5f, scaleFloorY - 0.5f), refFloor.transform.localRotation, transform);
+        wallsOuterMap[1] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX * 0.5f, 0.5f, scaleFloorY), refFloor.transform.localRotation, transform);
         wallsOuterMap[1].transform.localScale = new Vector3(scaleFloorX-offsetOuterMap, 1, 1);
         wallsOuterMap[1].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(scaleFloorX * 0.5f, 1);
 
-        wallsOuterMap[2] = Instantiate(refWallUnBreakable, new Vector3(0.5f, 0.5f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
+        wallsOuterMap[2] = Instantiate(refWallUnBreakable, new Vector3(0.0f, 0.5f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
         wallsOuterMap[2].transform.localScale = new Vector3(1, scaleFloorY, 1);
         wallsOuterMap[2].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1, scaleFloorY * 0.5f);
         
-        wallsOuterMap[3] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX - 0.5f, 0.5f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
+        wallsOuterMap[3] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX, 0.5f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
         wallsOuterMap[3].transform.localScale = new Vector3(1, scaleFloorY, 1);
         wallsOuterMap[3].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1, scaleFloorY * 0.5f);
 
         int randIteration = 0;
         int anotherRandIter = 0;
 
-        for (int i = 1; i < maxWidth / 2.25f; i++)
+        for (int i = 1; i < maxWidth * 0.5f; i++)
         {
-            for (int j = 1; j < maxHeight / 2.25f; j++)
+            for (int j = 1; j < maxHeight * 0.5f; j++)
             {
                 Vector3 posWallUnbreakable = new Vector3((initialPos.x + (i * scaleTileXWalls)) * offsetBetweenWalls, 0.5f,
                     (initialPos.z + (j * scaleTileZWalls)) * offsetBetweenWalls);
@@ -89,14 +89,16 @@ public class CreateMap : MonoBehaviour
             Vector3 posWallBreakable = Vector3.zero;
             if (anotherRandIter < 15)
             {
-                if ((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z + scaleTileZWalls) != (scaleFloorY * 0.5f))
+                if (((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z + scaleTileZWalls) != (scaleFloorY * 0.5f)) &&
+                    (posWallUnbreakable.x + scaleTileXWalls) != maxWidth && (posWallUnbreakable.z + scaleTileZWalls) != maxHeight)
                     posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z + scaleTileZWalls);
                 else
                     return;
             }
             else
             {
-                if ((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z) != (scaleFloorY * 0.5f))
+                if (((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z) != (scaleFloorY * 0.5f)) &&
+                    (posWallUnbreakable.x + scaleTileXWalls) != maxWidth && (posWallUnbreakable.z + scaleTileZWalls) != maxHeight )
                     posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z);
                 else
                     return;
