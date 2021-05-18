@@ -35,18 +35,23 @@ public class CreateMap : MonoBehaviour
         scaleFloorY = maxHeight;
 
         Vector3 initialPos = new Vector3(0.5f, -0.5f, 0.5f);
+        float offsetOuterMap = 2.0f;
 
         wallsOuterMap[0] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX * 0.5f, 0.5f, 0.5f), refFloor.transform.localRotation, transform);
-        wallsOuterMap[0].transform.localScale = new Vector3(scaleFloorX, 1, 1);
+        wallsOuterMap[0].transform.localScale = new Vector3(scaleFloorX - offsetOuterMap, 1, 1);
+        wallsOuterMap[0].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(scaleFloorX * 0.5f, 1);
 
         wallsOuterMap[1] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX * 0.5f, 0.5f, scaleFloorY - 0.5f), refFloor.transform.localRotation, transform);
-        wallsOuterMap[1].transform.localScale = new Vector3(scaleFloorX, 1, 1);
+        wallsOuterMap[1].transform.localScale = new Vector3(scaleFloorX-offsetOuterMap, 1, 1);
+        wallsOuterMap[1].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(scaleFloorX * 0.5f, 1);
 
         wallsOuterMap[2] = Instantiate(refWallUnBreakable, new Vector3(0.5f, 0.5f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
         wallsOuterMap[2].transform.localScale = new Vector3(1, scaleFloorY, 1);
-
+        wallsOuterMap[2].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1, scaleFloorY * 0.5f);
+        
         wallsOuterMap[3] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX - 0.5f, 0.5f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
         wallsOuterMap[3].transform.localScale = new Vector3(1, scaleFloorY, 1);
+        wallsOuterMap[3].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1, scaleFloorY * 0.5f);
 
         int randIteration = 0;
         int anotherRandIter = 0;
