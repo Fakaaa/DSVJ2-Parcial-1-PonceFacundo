@@ -36,28 +36,13 @@ public class Bomb : MonoBehaviour
     {
         isTrigger = true;
         isActive = true;
-        Player.playerHasPlaceABomb += BombActive;
         gameObject.GetComponent<SphereCollider>().isTrigger = true;
         timeForActiveTrigger = 1;
         timeTodestroyTrashObj = 0.2f;
     }
-    public void OnDisable()
-    {
-        Player.playerHasPlaceABomb -= BombActive;
-    }
     void Update()
     {
         CheckNearbyFoes();
-    }
-    public void BombActive(ref bool returnBool)
-    {
-        bool isBombActive;
-        if (isActive)
-            isBombActive = true;
-        else
-            isBombActive = false;
-
-        returnBool = isBombActive;
     }
     public void CheckNearbyFoes()
     {

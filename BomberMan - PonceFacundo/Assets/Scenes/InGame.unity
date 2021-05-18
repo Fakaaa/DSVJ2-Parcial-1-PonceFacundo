@@ -554,6 +554,17 @@ PrefabInstance:
       propertyPath: isAlive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: prefabBomb
+      value: 
+      objectReference: {fileID: 7146198520973192429, guid: 1377f3f3eb3721245863e15594317908,
+        type: 3}
+    - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: maxAmountBombs
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7199980161346886280, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: m_LocalPosition.y
