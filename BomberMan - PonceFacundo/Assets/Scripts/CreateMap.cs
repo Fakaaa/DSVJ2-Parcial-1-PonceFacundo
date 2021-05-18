@@ -14,6 +14,7 @@ public class CreateMap : MonoBehaviour
     [SerializeField] public GameObject refFloor;
     [SerializeField] public GameObject refWallBreakable;
     [SerializeField] public GameObject refWallUnBreakable;
+    [SerializeField] public GameObject refDoorPrefab;
 
     private GameObject floor;
     private GameObject[,] wallsCenterMap;
@@ -24,8 +25,12 @@ public class CreateMap : MonoBehaviour
     private float offsetBetweenWalls;
     public static float scaleFloorX;
     public static float scaleFloorY;
+
+    public bool doorPlaced;
+
     public void Awake()
     {
+        doorPlaced = false;
         offsetBetweenWalls = 2.0f;
         wallsCenterMap = new GameObject[maxWidth, maxHeight];
         wallsOuterMap = new GameObject[4];
@@ -97,6 +102,11 @@ public class CreateMap : MonoBehaviour
                     return;
             }
 
+            if (!doorPlaced)
+            {
+                wallsCenterMap[i, j] = Instantiate(refDoorPrefab, posWallBreakable, refFloor.transform.localRotation, transform);
+                doorPlaced = true;
+            }
             wallsCenterMap[i, j] = Instantiate(refWallBreakable, posWallBreakable, refFloor.transform.localRotation, transform);
         }
     }

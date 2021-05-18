@@ -9,9 +9,4 @@ public class Door : MonoBehaviour
     {
         isOpen = false;
     }
-
-    void Update()
-    {
-        
-    }
 }

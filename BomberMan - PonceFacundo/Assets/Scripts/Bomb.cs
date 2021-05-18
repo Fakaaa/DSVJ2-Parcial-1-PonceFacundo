@@ -37,6 +37,8 @@ public class Bomb : MonoBehaviour
         isTrigger = true;
         isActive = true;
         gameObject.GetComponent<SphereCollider>().isTrigger = true;
+        Vector3 posCentred = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
+        transform.position = posCentred;
         timeForActiveTrigger = 1;
         timeTodestroyTrashObj = 0.2f;
     }
@@ -51,9 +53,7 @@ public class Bomb : MonoBehaviour
         else
         {
             gameObject.GetComponent<SphereCollider>().isTrigger = false;
-            isTrigger = false;
-            Vector3 posCentred = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
-            transform.position = posCentred;
+            isTrigger = false;            
         }
 
         if (!isTrigger)

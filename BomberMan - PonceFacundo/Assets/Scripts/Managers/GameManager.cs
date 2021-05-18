@@ -1,15 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] public bool endGame;
-
     public enum PlayerFinalState
     {
         Win,
-        InGame,
         Defeat
     }
     public PlayerFinalState playerState;
@@ -21,7 +18,7 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
-        if(instance != null)
+        if (instance != null)
         {
             Destroy(gameObject);
             return;
@@ -30,27 +27,21 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void EndGame(PlayerFinalState state)
+    public void EndGame(ref bool playerAlive)
     {
         endGame = true;
-        switch (state)
-        {
-            case PlayerFinalState.Win:
 
-                break;
-            case PlayerFinalState.Defeat:
+        if (playerAlive)
+            playerState = PlayerFinalState.Win;
+        else
+            playerState = PlayerFinalState.Defeat;
 
-                break;
-        }
+        StartCoroutine(LoadEndScene());
     }
-
-    void Start()
+    IEnumerator LoadEndScene()
     {
-        
-    }
-
-    void Update()
-    {
-        
+        yield return new WaitForSeconds(1);
+        if (SceneLoader.Get() != null)
+            SceneLoader.Get().LoadScene("EndScene");
     }
 }

@@ -3,8 +3,12 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    private static SceneLoader instance;
     [SerializeField] public string ActualSceneLoaded;
+    private static SceneLoader instance;
+    public static SceneLoader Get()
+    {
+        return instance;
+    }
     private void Awake()
     {
         if(instance != null)

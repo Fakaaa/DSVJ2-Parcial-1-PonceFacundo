@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Player : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class Player : MonoBehaviour
     [SerializeField] public int actualAmountBombs;
 
     [SerializeField] public GameObject prefabBomb;
-
 
     public void Start()
     {
@@ -42,13 +42,12 @@ public class Player : MonoBehaviour
     {
         lifes--;
 
-
         if (lifes <= 0)
         {
             lifes = 0;
             isAlive = false;
             if (GameManager.Get() != null)
-                GameManager.Get().EndGame(GameManager.PlayerFinalState.Defeat);
+                GameManager.Get().EndGame(ref isAlive);
             Destroy(gameObject);
         }
     }
