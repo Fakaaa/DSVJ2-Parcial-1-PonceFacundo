@@ -79,13 +79,17 @@ public class CreateMap : MonoBehaviour
             Vector3 posWallBreakable = Vector3.zero;
             if (anotherRandIter < 15)
             {
-                if((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z + scaleTileZWalls) != (scaleFloorY * 0.5f))
+                if ((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z + scaleTileZWalls) != (scaleFloorY * 0.5f))
                     posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z + scaleTileZWalls);
+                else
+                    return;
             }
             else
             {
                 if ((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z) != (scaleFloorY * 0.5f))
                     posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z);
+                else
+                    return;
             }
 
             wallsCenterMap[i, j] = Instantiate(refWallBreakable, posWallBreakable, refFloor.transform.localRotation, transform);

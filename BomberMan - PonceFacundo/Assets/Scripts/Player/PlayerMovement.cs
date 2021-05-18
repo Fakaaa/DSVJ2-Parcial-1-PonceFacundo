@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         maxDistanceRaycasts = 0.8f;
-        transform.position = new Vector3(CreateMap.scaleFloorX * 0.5f, 0.2f, CreateMap.scaleFloorY * 0.5f);
+        transform.position = new Vector3(CreateMap.scaleFloorX - (CreateMap.scaleFloorX-2), 0.2f, CreateMap.scaleFloorY - (CreateMap.scaleFloorY-2));
         moveVec = Vector3.zero;
         canGoFront = true;
         canGoBack = true;

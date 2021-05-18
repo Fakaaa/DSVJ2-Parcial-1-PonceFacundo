@@ -130,7 +130,11 @@ public class Bomb : MonoBehaviour
         {
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
-                Destroy(hitInfo.collider.gameObject);
+                hitInfo.collider.gameObject.SetActive(false);
+                if (hitInfo.collider.tag != "Breakable")
+                {
+
+                }
             }
             else if(hitInfo.collider.tag == "Player")
             {

@@ -20,10 +20,13 @@ public class Player : MonoBehaviour
     {
         lifes--;
 
+
         if (lifes <= 0)
         {
             lifes = 0;
             isAlive = false;
+            if (GameManager.Get() != null)
+                GameManager.Get().EndGame(GameManager.PlayerFinalState.Defeat);
             Destroy(gameObject);
         }
     }
