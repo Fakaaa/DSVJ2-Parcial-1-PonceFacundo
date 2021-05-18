@@ -5,6 +5,9 @@ public class Player : MonoBehaviour
     [SerializeField] public bool isAlive;
     [SerializeField] public int lifes;
 
+    public delegate void PlaceSomeBombs(ref bool isPlaced);
+    public static PlaceSomeBombs playerHasPlaceABomb;
+
     public void Start()
     {
         Bomb.playerHasBeenDamaged += ReciveDamage;

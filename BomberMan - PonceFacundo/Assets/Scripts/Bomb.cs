@@ -13,6 +13,9 @@ public class Bomb : MonoBehaviour
     public delegate void PlayerReciveDamage();
     public static PlayerReciveDamage playerHasBeenDamaged;
 
+    public delegate void TheBombExplode();
+    public static TheBombExplode bombExplode;
+
     private float timeTodestroyTrashObj;
     private float timerTrashObj;
 
@@ -31,15 +34,30 @@ public class Bomb : MonoBehaviour
     private RaycastHit rightHit;
     public void Awake()
     {
+        isTrigger = true;
+        isActive = true;
+        Player.playerHasPlaceABomb += BombActive;
         gameObject.GetComponent<SphereCollider>().isTrigger = true;
         timeForActiveTrigger = 1;
-        isTrigger = true;
         timeTodestroyTrashObj = 0.2f;
-        isActive = true;
+    }
+    public void OnDisable()
+    {
+        Player.playerHasPlaceABomb -= BombActive;
     }
     void Update()
     {
         CheckNearbyFoes();
+    }
+    public void BombActive(ref bool returnBool)
+    {
+        bool isBombActive;
+        if (isActive)
+            isBombActive = true;
+        else
+            isBombActive = false;
+
+        returnBool = isBombActive;
     }
     public void CheckNearbyFoes()
     {
@@ -86,10 +104,12 @@ public class Bomb : MonoBehaviour
             }
             else
             {
+
                 if (timerTrashObj <= timeTodestroyTrashObj)
                     timerTrashObj += Time.deltaTime;
                 else
                 {
+                    bombExplode?.Invoke();
                     Destroy(gameObject);
                 }
             }

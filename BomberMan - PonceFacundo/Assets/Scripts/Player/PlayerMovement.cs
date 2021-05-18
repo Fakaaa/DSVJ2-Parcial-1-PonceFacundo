@@ -32,7 +32,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool canGoRight;
 
     private float maxDistanceRaycasts;
+    [SerializeField] private bool bombPlaced;
 
+    private void Awake()
+    {
+        Bomb.bombExplode += TheBomExplode;
+    }
+    public void OnDisable()
+    {
+        Bomb.bombExplode -= TheBomExplode;
+    }
     void Start()
     {
         maxDistanceRaycasts = 0.8f;
@@ -54,6 +63,10 @@ public class PlayerMovement : MonoBehaviour
         InputPlayer();
 
         MovePlayer();
+    }
+    public void TheBomExplode()
+    {
+        bombPlaced = false;
     }
     public void DrawRaysOnDebug()
     {
@@ -109,12 +122,13 @@ public class PlayerMovement : MonoBehaviour
             moveVec = Vector3.zero;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)) && !bombPlaced)
         {
             Instantiate(prefabBomb, transform.position, Quaternion.identity);
+            Player.playerHasPlaceABomb?.Invoke(ref bombPlaced);
         }
 
-        if(moveVec == Vector3.zero)
+        if (moveVec == Vector3.zero)
             playerDirection = MoveDirection.None;
     }
     public void ApplyDirection(float offsetToCenter, int direction, MoveDirection newDirection)
