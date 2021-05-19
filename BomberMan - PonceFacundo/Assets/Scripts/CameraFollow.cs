@@ -13,9 +13,19 @@ public class CameraFollow : MonoBehaviour
     private Vector3 zoom;
 
     private Vector3 posToMoveTowards;
+        
     private void Awake()
     {
+        Player.playerHasDie += LookAtPlayer;
         lookAtPlayer = false;
+    }
+    private void OnDisable()
+    {
+        Player.playerHasDie -= LookAtPlayer;
+    }
+    public void LookAtPlayer()
+    {
+        transform.LookAt(lookAtThat, lookAtThat.up);
     }
     void LateUpdate()
     {
@@ -30,10 +40,10 @@ public class CameraFollow : MonoBehaviour
         if(lookAtThat != null)
         {
             posToMoveTowards = lookAtThat.position + zoom;
-            
-            if(lookAtPlayer)
-                transform.LookAt(lookAtThat, lookAtThat.up);
-            
+
+            if (lookAtPlayer)
+                LookAtPlayer();
+
             transform.position = Vector3.Lerp(myPos, posToMoveTowards, Vector3.Distance(myPos, posToMoveTowards) * Time.deltaTime * speedFollow);
         }
     }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Player : MonoBehaviour
 {
@@ -9,6 +8,9 @@ public class Player : MonoBehaviour
     [SerializeField] public int actualAmountBombs;
 
     [SerializeField] public GameObject prefabBomb;
+
+    public delegate void ResetAfterDie();
+    public static ResetAfterDie playerHasDie;
 
     public void Start()
     {
@@ -41,6 +43,9 @@ public class Player : MonoBehaviour
     public void ReciveDamage()
     {
         lifes--;
+
+        playerHasDie?.Invoke();
+        transform.position = new Vector3(CreateMap.scaleFloorX - (CreateMap.scaleFloorX - 2), 0.2f, CreateMap.scaleFloorY - (CreateMap.scaleFloorY - 2));
 
         if (lifes <= 0)
         {
