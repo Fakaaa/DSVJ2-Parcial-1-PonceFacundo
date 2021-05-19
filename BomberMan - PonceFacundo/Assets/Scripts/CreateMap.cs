@@ -29,7 +29,7 @@ public class CreateMap : MonoBehaviour
 
     public bool doorPlaced;
 
-    public void Awake()
+    public void Start()
     {
         doorPlaced = false;
         offsetBetweenWalls = 2.0f;
@@ -73,6 +73,8 @@ public class CreateMap : MonoBehaviour
                 FindPlaceWallsBreakable(ref posWallUnbreakable, ref anotherRandIter, ref randIteration, i, j);
             }
         }
+
+        FindPlaceEnemy();
 
         floor = Instantiate(refFloor, new Vector3(scaleFloorX * 0.5f, 0.0f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
         floor.transform.localScale = new Vector3(scaleFloorX, scaleFloorY, 1);
@@ -124,17 +126,16 @@ public class CreateMap : MonoBehaviour
         }
     }
 
-    //void FindPlaceEnemy()
-    //{       
-    //    if(GameManager.Get()!= null)
-    //    {
-    //        for (int i = 0; i < GameManager.Get().GetMaxAmountEnemies(); i++)
-    //        {
-    //            Vector3 centerMap = new Vector3(scaleFloorX * 0.5f, 5, scaleFloorY * 0.5f);
-    //            GameObject go = Instantiate(refEnemy, centerMap, Quaternion.identity);
-    //
-    //
-    //        }
-    //    }
-    //}
+    void FindPlaceEnemy()
+    {       
+        if(GameManager.Get()!= null)
+        {
+            for (int i = 0; i < GameManager.Get().GetMaxAmountEnemies(); i++)
+            {
+                Vector3 centerMap = new Vector3(scaleFloorX * 0.5f, 0.3f, scaleFloorY * 0.5f);
+                GameObject go = Instantiate(refEnemy, centerMap, Quaternion.identity);
+                GameManager.Get().IncreaseAmountEnemies();
+            }
+        }
+    }
 }

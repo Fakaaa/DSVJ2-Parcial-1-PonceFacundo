@@ -129,15 +129,15 @@ public class Bomb : MonoBehaviour
             distanceBetweenBombAndImpact = (int)Vector3.Distance(transform.position, hitInfo.collider.gameObject.transform.position);
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
-                hitInfo.collider.gameObject.SetActive(false);
+                if (hitInfo.collider.tag == "Enemy")
+                    enemyHasBeenDamaged?.Invoke();
                 Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position , dirInstance);
 
                 for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
                 {
                     Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position - (direction.direction * i), dirInstance);
                 }
-                if (hitInfo.collider.tag == "Enemy")
-                    enemyHasBeenDamaged?.Invoke();
+                hitInfo.collider.gameObject.SetActive(false);
             }
             else if(hitInfo.collider.tag == "Player")
                 playerHasBeenDamaged?.Invoke();

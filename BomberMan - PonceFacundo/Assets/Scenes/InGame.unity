@@ -637,6 +637,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4458570142559129634, guid: 4212bf35adb6ba544b4c51498d90b2c0,
         type: 3}
+      propertyPath: refEnemy
+      value: 
+      objectReference: {fileID: 9222203598527186220, guid: 6b29714420064d54d94d6faaf1d0f683,
+        type: 3}
+    - target: {fileID: 4458570142559129634, guid: 4212bf35adb6ba544b4c51498d90b2c0,
+        type: 3}
       propertyPath: maxHeight
       value: 26
       objectReference: {fileID: 0}
