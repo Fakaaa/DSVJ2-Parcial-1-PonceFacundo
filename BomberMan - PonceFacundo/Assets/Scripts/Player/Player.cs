@@ -16,11 +16,13 @@ public class Player : MonoBehaviour
     {
         Bomb.playerHasBeenDamaged += ReciveDamage;
         Bomb.bombExplode += BombHasExplode;
+        Enemy.playerDamaged += ReciveDamage;
     }
     private void OnDisable()
     {
         Bomb.playerHasBeenDamaged -= ReciveDamage;
         Bomb.bombExplode -= BombHasExplode;
+        Enemy.playerDamaged -= ReciveDamage;
     }
     public void Update()
     {
