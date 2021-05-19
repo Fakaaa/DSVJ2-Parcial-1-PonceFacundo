@@ -7,7 +7,7 @@ public class Bomb : MonoBehaviour
     [SerializeField] public float timeToExplode;
     [SerializeField] public float timer;
     [SerializeField] public bool isActive;
-    [SerializeField] public float radiusExplode;
+    [SerializeField][Range(1,8)] public int radiusExplode;
     [SerializeField] public GameObject prefabExplosion;
 
     public delegate void PlayerReciveDamage();
@@ -84,8 +84,7 @@ public class Bomb : MonoBehaviour
                     DestroyWithRadius(ref backRay, ref backHit, ref hitBack, new Quaternion(-1, 5, 0, 1));
                     DestroyWithRadius(ref leftRay, ref leftHit, ref hitLeft, new Quaternion(1, 5, 0, 1));
                     DestroyWithRadius(ref rightRay, ref rightHit, ref hitRight, new Quaternion(0, -5, -1, 1));
-
-                    InstantiateExplosions();
+                    CenterExplosion();
 
                     isActive = false;
                     timer = 0;
@@ -93,7 +92,6 @@ public class Bomb : MonoBehaviour
             }
             else
             {
-
                 if (timerTrashObj <= timeTodestroyTrashObj)
                     timerTrashObj += Time.deltaTime;
                 else
@@ -105,36 +103,8 @@ public class Bomb : MonoBehaviour
         }
     }
 
-    public void InstantiateExplosions()
+    public void CenterExplosion()
     {
-        Quaternion frontSide = new Quaternion(0, 5, 1, 1);
-        for (int i = 1; i <= radiusExplode; i++)
-        {
-            if(!hitFront)
-                Instantiate(prefabExplosion, transform.position + (transform.forward * i), frontSide);
-        }
-
-        Quaternion rightSide = new Quaternion(1, 5, 0, 1);
-        for (int i = 1; i <= radiusExplode; i++)
-        {
-            if(!hitRight)
-                Instantiate(prefabExplosion, transform.position + (transform.right * i), rightSide);
-        }
-
-        Quaternion backSide = new Quaternion(0, -5, -1, 1);
-        for (int i = 1; i <= radiusExplode; i++)
-        {
-            if(!hitBack)
-                Instantiate(prefabExplosion, transform.position + (-transform.forward * i), backSide);
-        }
-        
-        Quaternion leftSide = new Quaternion(-1, 5, 0, 1);
-        for (int i = 1; i <= radiusExplode; i++)
-        {
-            if(!hitLeft)
-                Instantiate(prefabExplosion, transform.position + (-transform.right * i), leftSide);
-        }
-
         GameObject mainExplode = Instantiate(prefabExplosion);
         mainExplode.transform.localScale = new Vector3(2, 2, 2);
         Instantiate(mainExplode, transform.position, Quaternion.identity);
@@ -148,18 +118,32 @@ public class Bomb : MonoBehaviour
     }
     public void DestroyWithRadius(ref Ray direction, ref RaycastHit hitInfo, ref bool hitThatSide, Quaternion dirInstance)
     {
+        int distanceBetweenBombAndImpact;
+
         if (Physics.Raycast(direction, out hitInfo, radiusExplode))
         {
             hitThatSide = true;
+            distanceBetweenBombAndImpact = (int)Vector3.Distance(transform.position, hitInfo.collider.gameObject.transform.position);
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
                 hitInfo.collider.gameObject.SetActive(false);
                 Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position , dirInstance);
-                Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position - direction.direction, dirInstance);
+
+                for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
+                {
+                    Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position - (direction.direction * i), dirInstance);
+                }
             }
             else if(hitInfo.collider.tag == "Player")
             {
                 playerHasBeenDamaged?.Invoke();
+            }
+        }
+        else
+        {
+            for (int i = 1; i <= radiusExplode; i++)
+            {
+                Instantiate(prefabExplosion, transform.position + (direction.direction * i), dirInstance);
             }
         }
     }

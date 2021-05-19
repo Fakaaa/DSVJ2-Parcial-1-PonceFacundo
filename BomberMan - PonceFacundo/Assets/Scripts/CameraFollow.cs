@@ -6,13 +6,17 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] public Transform lookAtThat;
 
-    [SerializeField][Range(2,8)] public float zoomUp;
+    [SerializeField][Range(0.5f,9)] public float speedFollow;
     [SerializeField][Range(3,10)] public float zoomDistance;
-    [SerializeField][Range(0.5f,9)] public float smothSpeed;
+    [SerializeField][Range(2,8)] public float zoomUp;
+    [SerializeField] public bool lookAtPlayer;
     private Vector3 zoom;
 
     private Vector3 posToMoveTowards;
-
+    private void Awake()
+    {
+        lookAtPlayer = false;
+    }
     void LateUpdate()
     {
         FocusToTargetAndMove();
@@ -26,10 +30,11 @@ public class CameraFollow : MonoBehaviour
         if(lookAtThat != null)
         {
             posToMoveTowards = lookAtThat.position + zoom;
-
-            //transform.LookAt(lookAtThat, lookAtThat.up);
             
-            transform.position = Vector3.Lerp(myPos, posToMoveTowards, Vector3.Distance(myPos, posToMoveTowards) * Time.deltaTime * smothSpeed);
+            if(lookAtPlayer)
+                transform.LookAt(lookAtThat, lookAtThat.up);
+            
+            transform.position = Vector3.Lerp(myPos, posToMoveTowards, Vector3.Distance(myPos, posToMoveTowards) * Time.deltaTime * speedFollow);
         }
     }
 }

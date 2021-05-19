@@ -293,9 +293,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookAtThat: {fileID: 914895145}
-  zoomUp: 4
+  speedFollow: 2
   zoomDistance: 7
-  smothSpeed: 2
+  zoomUp: 4
+  lookAtPlayer: 0
 --- !u!1001 &1614950176
 PrefabInstance:
   m_ObjectHideFlags: 0
