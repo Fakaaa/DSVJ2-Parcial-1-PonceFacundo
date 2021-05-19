@@ -13,6 +13,9 @@ public class Bomb : MonoBehaviour
     public delegate void PlayerReciveDamage();
     public static PlayerReciveDamage playerHasBeenDamaged;
 
+    public delegate void EnemyHasDie();
+    public static EnemyHasDie enemyHasBeenDamaged;
+
     public delegate void TheBombExplode();
     public static TheBombExplode bombExplode;
 
@@ -133,11 +136,11 @@ public class Bomb : MonoBehaviour
                 {
                     Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position - (direction.direction * i), dirInstance);
                 }
+                if (hitInfo.collider.tag == "Enemy")
+                    enemyHasBeenDamaged?.Invoke();
             }
             else if(hitInfo.collider.tag == "Player")
-            {
                 playerHasBeenDamaged?.Invoke();
-            }
         }
         else
         {

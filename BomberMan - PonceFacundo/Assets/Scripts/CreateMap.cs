@@ -15,6 +15,7 @@ public class CreateMap : MonoBehaviour
     [SerializeField] public GameObject refWallBreakable;
     [SerializeField] public GameObject refWallUnBreakable;
     [SerializeField] public GameObject refDoorPrefab;
+    [SerializeField] public GameObject refEnemy;
 
     private GameObject floor;
     private GameObject[,] wallsCenterMap;
@@ -122,4 +123,18 @@ public class CreateMap : MonoBehaviour
             wallsCenterMap[i, j] = Instantiate(refWallBreakable, posWallBreakable, refFloor.transform.localRotation, transform);
         }
     }
+
+    //void FindPlaceEnemy()
+    //{       
+    //    if(GameManager.Get()!= null)
+    //    {
+    //        for (int i = 0; i < GameManager.Get().GetMaxAmountEnemies(); i++)
+    //        {
+    //            Vector3 centerMap = new Vector3(scaleFloorX * 0.5f, 5, scaleFloorY * 0.5f);
+    //            GameObject go = Instantiate(refEnemy, centerMap, Quaternion.identity);
+    //
+    //
+    //        }
+    //    }
+    //}
 }

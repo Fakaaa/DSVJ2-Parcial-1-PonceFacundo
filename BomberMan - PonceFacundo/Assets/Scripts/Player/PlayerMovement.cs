@@ -104,9 +104,7 @@ public class PlayerMovement : MonoBehaviour
         else if (Input.GetKey(KeyCode.D) && canGoRight)
             ApplyDirection(transform.position.x, 1, MoveDirection.Right);
         else
-        {
             moveVec = Vector3.zero;
-        }
 
         if (moveVec == Vector3.zero)
             playerDirection = MoveDirection.None;
