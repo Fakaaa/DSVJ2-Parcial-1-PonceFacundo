@@ -79,6 +79,7 @@ public class CreateMap : MonoBehaviour
 
     void FindPlaceWallsBreakable(ref Vector3 posWallUnbreakable, ref int anotherRandIter, ref int randIteration, int i, int j)
     {
+        int randomPlaceBomb = 0;
         anotherRandIter = Random.Range(0, 30);
 
         if (anotherRandIter > 15)
@@ -86,6 +87,7 @@ public class CreateMap : MonoBehaviour
 
         if (randIteration > 5)
         {
+            randomPlaceBomb = Random.Range(0, 100);
             Vector3 posWallBreakable = Vector3.zero;
             if (anotherRandIter < 15)
             {
@@ -106,8 +108,16 @@ public class CreateMap : MonoBehaviour
 
             if (!doorPlaced)
             {
-                wallsCenterMap[i, j] = Instantiate(refDoorPrefab, posWallBreakable, refFloor.transform.localRotation, transform);
-                doorPlaced = true;
+                if(randomPlaceBomb > 90)
+                {
+                    wallsCenterMap[i, j] = Instantiate(refDoorPrefab, posWallBreakable, refFloor.transform.localRotation, transform);
+                    doorPlaced = true;
+                }
+                if(i == (maxWidth * 0.5f) && j == (maxWidth * 0.5f) && !doorPlaced)
+                {
+                    wallsCenterMap[i, j] = Instantiate(refDoorPrefab, posWallBreakable, refFloor.transform.localRotation, transform);
+                    doorPlaced = true;
+                }
             }
             wallsCenterMap[i, j] = Instantiate(refWallBreakable, posWallBreakable, refFloor.transform.localRotation, transform);
         }
