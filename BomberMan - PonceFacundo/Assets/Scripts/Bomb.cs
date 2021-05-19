@@ -24,6 +24,11 @@ public class Bomb : MonoBehaviour
 
     private bool isTrigger;
 
+    private bool hitLeft;
+    private bool hitFront;
+    private bool hitBack;
+    private bool hitRight;
+
     private Ray leftRay;
     private Ray rightRay;
     private Ray frontRay;
@@ -34,6 +39,10 @@ public class Bomb : MonoBehaviour
     private RaycastHit rightHit;
     public void Awake()
     {
+        hitLeft = false;
+        hitFront = false;
+        hitBack = false;
+        hitRight = false;
         isTrigger = true;
         isActive = true;
         gameObject.GetComponent<SphereCollider>().isTrigger = true;
@@ -71,19 +80,12 @@ public class Bomb : MonoBehaviour
 
                     DrawRaysOnDebug();
 
-                    Quaternion frontSide = new Quaternion(0, 0, 1, 1);
-                    //Quaternion leftSide = new Quaternion(-1,0,0,1);
-                    //Quaternion rightSide = new Quaternion(1, 0, 0, 1);
-                    //Quaternion backSide = new Quaternion(0, 0,-1, 1);
-                    Instantiate(prefabExplosion, transform.position + (transform.forward / 3.5f), frontSide);
-                    //Instantiate(prefabExplosion, transform.position + (-transform.forward / 3.5f), backSide);
-                    //Instantiate(prefabExplosion, transform.position + (transform.right / 3.5f), rightSide);
-                    //Instantiate(prefabExplosion, transform.position + (-transform.right / 3.5f), leftSide);
+                    DestroyWithRadius(ref frontRay, ref frontHit, ref hitFront, new Quaternion(0, 5, 1, 1));
+                    DestroyWithRadius(ref backRay, ref backHit, ref hitBack, new Quaternion(-1, 5, 0, 1));
+                    DestroyWithRadius(ref leftRay, ref leftHit, ref hitLeft, new Quaternion(1, 5, 0, 1));
+                    DestroyWithRadius(ref rightRay, ref rightHit, ref hitRight, new Quaternion(0, -5, -1, 1));
 
-                    DestroyWithRadius(ref frontRay, ref frontHit);
-                    DestroyWithRadius(ref backRay, ref backHit);
-                    DestroyWithRadius(ref leftRay, ref leftHit);
-                    DestroyWithRadius(ref rightRay, ref rightHit);
+                    InstantiateExplosions();
 
                     isActive = false;
                     timer = 0;
@@ -102,6 +104,41 @@ public class Bomb : MonoBehaviour
             }
         }
     }
+
+    public void InstantiateExplosions()
+    {
+        Quaternion frontSide = new Quaternion(0, 5, 1, 1);
+        for (int i = 1; i <= radiusExplode; i++)
+        {
+            if(!hitFront)
+                Instantiate(prefabExplosion, transform.position + (transform.forward * i), frontSide);
+        }
+
+        Quaternion rightSide = new Quaternion(1, 5, 0, 1);
+        for (int i = 1; i <= radiusExplode; i++)
+        {
+            if(!hitRight)
+                Instantiate(prefabExplosion, transform.position + (transform.right * i), rightSide);
+        }
+
+        Quaternion backSide = new Quaternion(0, -5, -1, 1);
+        for (int i = 1; i <= radiusExplode; i++)
+        {
+            if(!hitBack)
+                Instantiate(prefabExplosion, transform.position + (-transform.forward * i), backSide);
+        }
+        
+        Quaternion leftSide = new Quaternion(-1, 5, 0, 1);
+        for (int i = 1; i <= radiusExplode; i++)
+        {
+            if(!hitLeft)
+                Instantiate(prefabExplosion, transform.position + (-transform.right * i), leftSide);
+        }
+
+        GameObject mainExplode = Instantiate(prefabExplosion);
+        mainExplode.transform.localScale = new Vector3(2, 2, 2);
+        Instantiate(mainExplode, transform.position, Quaternion.identity);
+    }
     public void DrawRaysOnDebug()
     {
         Debug.DrawRay(frontRay.origin, frontRay.direction, Color.magenta);
@@ -109,17 +146,16 @@ public class Bomb : MonoBehaviour
         Debug.DrawRay(leftRay.origin, leftRay.direction, Color.blue);
         Debug.DrawRay(rightRay.origin, rightRay.direction, Color.green);
     }
-    public void DestroyWithRadius(ref Ray direction, ref RaycastHit hitInfo)
+    public void DestroyWithRadius(ref Ray direction, ref RaycastHit hitInfo, ref bool hitThatSide, Quaternion dirInstance)
     {
         if (Physics.Raycast(direction, out hitInfo, radiusExplode))
         {
+            hitThatSide = true;
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
                 hitInfo.collider.gameObject.SetActive(false);
-                if (hitInfo.collider.tag != "Breakable")
-                {
-
-                }
+                Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position , dirInstance);
+                Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position - direction.direction, dirInstance);
             }
             else if(hitInfo.collider.tag == "Player")
             {
