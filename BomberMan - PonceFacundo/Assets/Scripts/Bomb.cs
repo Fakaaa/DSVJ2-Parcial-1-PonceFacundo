@@ -79,8 +79,6 @@ public class Bomb : MonoBehaviour
                     leftRay = new Ray(transform.position, -transform.right);
                     rightRay = new Ray(transform.position, transform.right);
 
-                    DrawRaysOnDebug();
-
                     DestroyWithRadius(ref frontRay, ref frontHit, ref hitFront, new Quaternion(0, 5, 1, 1));
                     DestroyWithRadius(ref backRay, ref backHit, ref hitBack, new Quaternion(-1, 5, 0, 1));
                     DestroyWithRadius(ref leftRay, ref leftHit, ref hitLeft, new Quaternion(1, 5, 0, 1));
@@ -112,10 +110,11 @@ public class Bomb : MonoBehaviour
     }
     public void DrawRaysOnDebug()
     {
-        Debug.DrawRay(frontRay.origin, frontRay.direction, Color.magenta);
-        Debug.DrawRay(backRay.origin, backRay.direction, Color.red);
-        Debug.DrawRay(leftRay.origin, leftRay.direction, Color.blue);
-        Debug.DrawRay(rightRay.origin, rightRay.direction, Color.green);
+        Debug.DrawRay(frontRay.origin, frontRay.direction * radiusExplode, Color.magenta);
+        Debug.DrawRay(backRay.origin, backRay.direction * radiusExplode, Color.red);
+        Debug.DrawRay(leftRay.origin, leftRay.direction * radiusExplode, Color.blue);
+        Debug.DrawRay(rightRay.origin, rightRay.direction * radiusExplode, Color.green);
+        Debug.Break();
     }
     public void DestroyWithRadius(ref Ray direction, ref RaycastHit hitInfo, ref bool hitThatSide, Quaternion dirInstance)
     {
@@ -125,6 +124,12 @@ public class Bomb : MonoBehaviour
         {
             hitThatSide = true;
             distanceBetweenBombAndImpact = (int)Vector3.Distance(transform.position, hitInfo.collider.gameObject.transform.position);
+
+            for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
+            {
+                Instantiate(prefabExplosion, hitInfo.point - (direction.direction * i), dirInstance);
+            }
+
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
                 if (ghostHited == 0 && hitInfo.collider.tag == "Enemy")
@@ -136,10 +141,6 @@ public class Bomb : MonoBehaviour
 
                 Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position , dirInstance);
 
-                for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
-                {
-                    Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position - (direction.direction * i), dirInstance);
-                }
                 Destroy(hitInfo.collider.gameObject);
             }
             else if(hitInfo.collider.tag == "Player")
@@ -152,5 +153,7 @@ public class Bomb : MonoBehaviour
                 Instantiate(prefabExplosion, transform.position + (direction.direction * i), dirInstance);
             }
         }
+
+        DrawRaysOnDebug();
     }
 }
