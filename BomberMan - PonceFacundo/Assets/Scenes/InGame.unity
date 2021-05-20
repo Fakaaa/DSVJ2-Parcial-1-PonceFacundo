@@ -736,7 +736,7 @@ GameObject:
   - component: {fileID: 642144805}
   - component: {fileID: 642144804}
   m_Layer: 5
-  m_Name: RangeBombAmount (1)
+  m_Name: KilledEnemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1080,6 +1080,7 @@ GameObject:
   - component: {fileID: 1221370365}
   - component: {fileID: 1221370364}
   - component: {fileID: 1221370363}
+  - component: {fileID: 1221370367}
   m_Layer: 5
   m_Name: UI_Player
   m_TagString: Untagged
@@ -1168,6 +1169,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1221370367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221370362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d606e440a639f844ba3648e460071ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifesPlayer: {fileID: 604306667}
+  amountBombsCanPlace: {fileID: 356088857}
+  rangeBombsPlaced: {fileID: 1740377840}
+  enemiesKilled: {fileID: 642144804}
+  timerGame: {fileID: 940229613}
+  playerRef: {fileID: 1415016882}
+--- !u!114 &1415016882 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1267368141517524138}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933f38c8aa39a91429a50857f7a4ab8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1466246711
 GameObject:
   m_ObjectHideFlags: 0
@@ -1699,6 +1730,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7146198520973192429, guid: 1377f3f3eb3721245863e15594317908,
         type: 3}
+    - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
+        type: 3}
+      propertyPath: radiusMyBombs
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: maxAmountBombs

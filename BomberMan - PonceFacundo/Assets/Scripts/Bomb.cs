@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
@@ -12,9 +10,6 @@ public class Bomb : MonoBehaviour
 
     public delegate void PlayerReciveDamage();
     public static PlayerReciveDamage playerHasBeenDamaged;
-
-    //public delegate void EnemyHasDie();
-    //public static EnemyHasDie enemyHasBeenDamaged;
 
     public delegate void TheBombExplode();
     public static TheBombExplode bombExplode;

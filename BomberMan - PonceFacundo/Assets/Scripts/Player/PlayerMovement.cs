@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit myHitLeft;
     private Ray rightRay;
     private RaycastHit myHitRight;
-
     public enum MoveDirection
     {
         Front,

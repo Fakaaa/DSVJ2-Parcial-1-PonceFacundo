@@ -6,17 +6,23 @@ public class Player : MonoBehaviour
     [SerializeField] public int lifes;
     [SerializeField] public int maxAmountBombs;
     [SerializeField] public int actualAmountBombs;
+    [SerializeField] public int radiusMyBombs;
 
     [SerializeField] public GameObject prefabBomb;
 
     public delegate void ResetAfterDie();
     public static ResetAfterDie playerHasDie;
 
+    public delegate void PassInfoUI();
+    public PassInfoUI passMyDataToTheUI;
+
     public void Start()
     {
+        prefabBomb.GetComponent<Bomb>().radiusExplode = radiusMyBombs;
         Bomb.playerHasBeenDamaged += ReciveDamage;
         Bomb.bombExplode += BombHasExplode;
         Enemy.playerDamaged += ReciveDamage;
+        passMyDataToTheUI?.Invoke();
     }
     private void OnDisable()
     {
@@ -34,12 +40,14 @@ public class Player : MonoBehaviour
         {
             actualAmountBombs++;
             Instantiate(prefabBomb, transform.position, Quaternion.identity);
+            passMyDataToTheUI?.Invoke();
         }
     }
 
     public void BombHasExplode()
     {
         actualAmountBombs--;
+        passMyDataToTheUI?.Invoke();
     }
 
     public void ReciveDamage()
@@ -48,6 +56,7 @@ public class Player : MonoBehaviour
 
         playerHasDie?.Invoke();
         transform.position = new Vector3(CreateMap.scaleFloorX - (CreateMap.scaleFloorX - 2), 0.2f, CreateMap.scaleFloorY - (CreateMap.scaleFloorY - 2));
+        passMyDataToTheUI?.Invoke();
 
         if (lifes <= 0)
         {

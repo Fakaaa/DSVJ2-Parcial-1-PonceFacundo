@@ -29,14 +29,9 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         isAlive = true;
-        //Bomb.enemyHasBeenDamaged += EnemyDie;
         maxDistanceRaycasts = 0.8f;
         newPosition = transform.position + Vector3.forward;
     }
-    //private void OnDisable()
-    //{
-    //    //Bomb.enemyHasBeenDamaged -= EnemyDie;
-    //}
     private void Update()
     {
         MoveEnemy();
@@ -54,10 +49,6 @@ public class Enemy : MonoBehaviour
         forwardRay = new Ray(transform.position, transform.forward);
         rightRay = new Ray(transform.position, transform.right);
         leftRay = new Ray(transform.position, -transform.right);
-    }
-    void EnemyDie()
-    {
-        
     }
     void MoveEnemy()
     {

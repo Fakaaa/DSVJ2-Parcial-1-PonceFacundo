@@ -134,7 +134,8 @@ public class CreateMap : MonoBehaviour
             {
                 Vector3 centerMap = new Vector3(scaleFloorX * 0.5f, 0.3f, scaleFloorY * 0.5f);
                 GameObject go = Instantiate(refEnemy, centerMap, Quaternion.identity);
-                GameManager.Get().IncreaseAmountEnemies();
+                if(GameManager.Get().GetActualAmountEnemies() < GameManager.Get().GetMaxAmountEnemies())
+                    GameManager.Get().IncreaseAmountEnemies();
             }
         }
     }
