@@ -5,7 +5,7 @@ public class Bomb : MonoBehaviour
     [SerializeField] public float timeToExplode;
     [SerializeField] public float timer;
     [SerializeField] public bool isActive;
-    [SerializeField][Range(1,8)] public int radiusExplode;
+    [SerializeField] [Range(1, 8)] public int radiusExplode;
     [SerializeField] public GameObject prefabExplosion;
 
     public delegate void PlayerReciveDamage();
@@ -20,7 +20,12 @@ public class Bomb : MonoBehaviour
     private float timeForActiveTrigger;
     private float timerToActiveCollision;
 
+    private float timerExplosionActive;
+    private float timeUntilExplosionActiveFalse;
+
     private bool isTrigger;
+
+    private bool partyclesAlreadyActive;
 
     private bool hitLeft;
     private bool hitFront;
@@ -39,7 +44,10 @@ public class Bomb : MonoBehaviour
     int ghostHited;
     public void Awake()
     {
+        timerExplosionActive = 0;
+        timeUntilExplosionActiveFalse = 1;
         ghostHited = 0;
+        partyclesAlreadyActive = false;
         hitLeft = false;
         hitFront = false;
         hitBack = false;
@@ -63,7 +71,7 @@ public class Bomb : MonoBehaviour
         else
         {
             gameObject.GetComponent<SphereCollider>().isTrigger = false;
-            isTrigger = false;            
+            isTrigger = false;
         }
 
         if (!isTrigger)
@@ -85,8 +93,13 @@ public class Bomb : MonoBehaviour
                     DestroyWithRadius(ref rightRay, ref rightHit, ref hitRight, new Quaternion(0, -5, -1, 1));
                     CenterExplosion();
 
-                    isActive = false;
-                    timer = 0;
+                    if (timerExplosionActive <= timeUntilExplosionActiveFalse)
+                        timerExplosionActive += Time.deltaTime;
+                    else
+                    {
+                        isActive = false;
+                        timer = 0;
+                    }
                 }
             }
             else
@@ -104,9 +117,13 @@ public class Bomb : MonoBehaviour
 
     public void CenterExplosion()
     {
-        GameObject mainExplode = Instantiate(prefabExplosion);
-        mainExplode.transform.localScale = new Vector3(2, 2, 2);
-        Instantiate(mainExplode, transform.position, Quaternion.identity);
+        if(!partyclesAlreadyActive)
+        {
+            GameObject mainExplode = Instantiate(prefabExplosion);
+            mainExplode.transform.localScale = new Vector3(2, 2, 2);
+            Instantiate(mainExplode, transform.position, Quaternion.identity);
+            partyclesAlreadyActive = true;
+        }
     }
     public void DrawRaysOnDebug()
     {
@@ -114,7 +131,6 @@ public class Bomb : MonoBehaviour
         Debug.DrawRay(backRay.origin, backRay.direction * radiusExplode, Color.red);
         Debug.DrawRay(leftRay.origin, leftRay.direction * radiusExplode, Color.blue);
         Debug.DrawRay(rightRay.origin, rightRay.direction * radiusExplode, Color.green);
-        Debug.Break();
     }
     public void DestroyWithRadius(ref Ray direction, ref RaycastHit hitInfo, ref bool hitThatSide, Quaternion dirInstance)
     {
@@ -127,7 +143,8 @@ public class Bomb : MonoBehaviour
 
             for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
             {
-                Instantiate(prefabExplosion, hitInfo.point - (direction.direction * i), dirInstance);
+                if (!partyclesAlreadyActive)
+                    Instantiate(prefabExplosion, hitInfo.point - (direction.direction * i), dirInstance);
             }
 
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
@@ -135,22 +152,30 @@ public class Bomb : MonoBehaviour
                 if (ghostHited == 0 && hitInfo.collider.tag == "Enemy")
                 {
                     if (GameManager.Get() != null)
+                    {
                         GameManager.Get().DecreaseAmountEnemies();
+                        GameManager.Get().SetPlayerScore(100);
+                    }
                     ghostHited = 1;
                 }
 
-                Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position , dirInstance);
+                if (GameManager.Get() != null)
+                    GameManager.Get().SetPlayerScore(50);
+
+                if (!partyclesAlreadyActive)
+                    Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position, dirInstance);
 
                 Destroy(hitInfo.collider.gameObject);
             }
-            else if(hitInfo.collider.tag == "Player")
+            else if (hitInfo.collider.tag == "Player")
                 playerHasBeenDamaged?.Invoke();
         }
         else
         {
             for (int i = 1; i <= radiusExplode; i++)
             {
-                Instantiate(prefabExplosion, transform.position + (direction.direction * i), dirInstance);
+                if (!partyclesAlreadyActive)
+                    Instantiate(prefabExplosion, transform.position + (direction.direction * i), dirInstance);
             }
         }
 

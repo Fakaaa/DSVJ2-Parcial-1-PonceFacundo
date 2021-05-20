@@ -23,6 +23,11 @@ public class SceneLoader : MonoBehaviour
     {
         ActualSceneLoaded = name;
         SceneManager.LoadScene(name);
+
+        if (name == "InGame" && GameManager.Get() != null)
+            GameManager.Get().SetPlayState(GameManager.PlayerFinalState.InGame);
+        else if(name == "MainMenu" && GameManager.Get() != null)
+            GameManager.Get().SetPlayState(GameManager.PlayerFinalState.InMenu);
     }
     public void ExitGame()
     {

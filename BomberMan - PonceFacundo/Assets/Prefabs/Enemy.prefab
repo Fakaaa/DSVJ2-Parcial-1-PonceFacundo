@@ -618,7 +618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 913bf942072bcd34ebf1df49ee64d8cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpeed: 1
+  enemySpeed: 5
   timeUntilChangeDirection: 5
   refRaycastPos: {fileID: 7846796146335280957}
   newPosition: {x: 0, y: 0, z: 0}

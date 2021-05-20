@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] public int enemySpeed;
     [SerializeField] public float timeUntilChangeDirection;
     [SerializeField] public GameObject refRaycastPos;
 
@@ -26,8 +25,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] List<Vector3> positions;
 
     private bool isAlive;
+    private float enemySpeed;
     void Start()
     {
+        if (GameManager.Get() != null)
+            enemySpeed = GameManager.Get().GetEnemySpeed();
         isAlive = true;
         maxDistanceRaycasts = 0.8f;
         newPosition = transform.position + Vector3.forward;

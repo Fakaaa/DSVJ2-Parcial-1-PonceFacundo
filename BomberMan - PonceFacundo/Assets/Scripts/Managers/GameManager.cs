@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public enum PlayerFinalState
     {
         Win,
+        InMenu,
+        InGame,
         Defeat
     }
     public PlayerFinalState playerState;
@@ -22,6 +24,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int amountEnemies;
     [SerializeField] private int maxEnemies;
+    [SerializeField] public float timeGame;
+    [SerializeField][Range(1,5)] 
+    public float enemySpeed;
+    [Header("PLAYER SCORE")]
+    [Space(30)]
+    [SerializeField] public int scorePlayer;
+    private int auxScore;
     private void Awake()
     {
         if (instance != null)
@@ -32,7 +41,28 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
+    public void SetPlayState(PlayerFinalState state)
+    {
+        playerState = state;
+    }
+    public void ResetData()
+    {
+        scorePlayer = 0;
+        timeGame = 0;
+    }
+    public void SetPlayerScore(int score)
+    {
+        scorePlayer += score;
+        auxScore = scorePlayer;
+    }
+    public float GetEnemySpeed()
+    {
+        return enemySpeed;
+    }
+    public float GetPlayerScore()
+    {
+        return scorePlayer;
+    }
     public void EndGame(ref bool playerAlive)
     {
         endGame = true;
@@ -42,6 +72,8 @@ public class GameManager : MonoBehaviour
         else
             playerState = PlayerFinalState.Defeat;
 
+        ResetData();
+
         StartCoroutine(LoadEndScene());
     }
     IEnumerator LoadEndScene()
@@ -49,6 +81,19 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         if (SceneLoader.Get() != null)
             SceneLoader.Get().LoadScene("EndScene");
+    }
+    public void Update()
+    {
+        CalTimeGame();
+    }
+    void CalTimeGame()
+    {
+        if(playerState == PlayerFinalState.InGame)
+            timeGame += Time.deltaTime;
+    }
+    public float GetTimeGame()
+    {
+        return timeGame;
     }
     public void DecreaseAmountEnemies()
     {
