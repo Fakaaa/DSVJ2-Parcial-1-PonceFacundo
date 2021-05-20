@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)) && actualAmountBombs < maxAmountBombs)
         {
             actualAmountBombs++;
+            prefabBomb.GetComponent<Bomb>().radiusExplode = radiusMyBombs;
             Instantiate(prefabBomb, transform.position, Quaternion.identity);
             passMyDataToTheUI?.Invoke();
         }

@@ -43,7 +43,7 @@ public class UI_Player : MonoBehaviour
             }
             enemiesKilled.text = amountEnemiesKilled.ToString();
             lifesPlayer.text = playerRef.lifes.ToString();
-            amountBombsCanPlace.text = "Placed\n" + playerRef.actualAmountBombs.ToString();
+            amountBombsCanPlace.text = "Placed\n" + playerRef.actualAmountBombs.ToString() + "/" + playerRef.maxAmountBombs.ToString();
             rangeBombsPlaced.text = "Range\n" + playerRef.radiusMyBombs.ToString();
         }
     }

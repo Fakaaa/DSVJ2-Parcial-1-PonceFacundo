@@ -42,11 +42,13 @@ public class Bomb : MonoBehaviour
     private RaycastHit rightHit;
 
     int ghostHited;
+    int playerHited;
     public void Awake()
     {
         timerExplosionActive = 0;
         timeUntilExplosionActiveFalse = 1;
         ghostHited = 0;
+        playerHited = 0;
         partyclesAlreadyActive = false;
         hitLeft = false;
         hitFront = false;
@@ -117,7 +119,7 @@ public class Bomb : MonoBehaviour
 
     public void CenterExplosion()
     {
-        if(!partyclesAlreadyActive)
+        if (!partyclesAlreadyActive)
         {
             GameObject mainExplode = Instantiate(prefabExplosion);
             mainExplode.transform.localScale = new Vector3(2, 2, 2);
@@ -141,12 +143,6 @@ public class Bomb : MonoBehaviour
             hitThatSide = true;
             distanceBetweenBombAndImpact = (int)Vector3.Distance(transform.position, hitInfo.collider.gameObject.transform.position);
 
-            for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
-            {
-                if (!partyclesAlreadyActive)
-                    Instantiate(prefabExplosion, hitInfo.point - (direction.direction * i), dirInstance);
-            }
-
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
                 if (ghostHited == 0 && hitInfo.collider.tag == "Enemy")
@@ -165,10 +161,19 @@ public class Bomb : MonoBehaviour
                 if (!partyclesAlreadyActive)
                     Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position, dirInstance);
 
+                for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
+                {
+                    if (!partyclesAlreadyActive)
+                        Instantiate(prefabExplosion, hitInfo.point - (direction.direction * i), dirInstance);
+                }
+
                 Destroy(hitInfo.collider.gameObject);
             }
-            else if (hitInfo.collider.tag == "Player")
+            else if (hitInfo.collider.tag == "Player" && playerHited == 0)
+            {
                 playerHasBeenDamaged?.Invoke();
+                playerHited = 1;
+            }
         }
         else
         {
