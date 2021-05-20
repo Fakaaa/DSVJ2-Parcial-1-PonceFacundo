@@ -11,7 +11,6 @@ public class Enemy : MonoBehaviour
     public delegate void PlayerHurt();
     public static PlayerHurt playerDamaged;
 
-    private Vector3 moveVec;
     [SerializeField] private Vector3 newPosition;
 
     private RaycastHit myHitForward;
@@ -26,19 +25,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float maxDelayRotate;
     [SerializeField] List<Vector3> positions;
 
-    private float delayRoation;
+    private bool isAlive;
     void Start()
     {
-        Bomb.enemyHasBeenDamaged += EnemyDie;
-        moveVec = Vector3.forward;
-        maxDistanceRaycasts = 0.6f;
+        isAlive = true;
+        //Bomb.enemyHasBeenDamaged += EnemyDie;
+        maxDistanceRaycasts = 0.8f;
         newPosition = transform.position + Vector3.forward;
-        delayRoation = Random.Range(minDelayRotate, maxDelayRotate);
     }
-    private void OnDisable()
-    {
-        Bomb.enemyHasBeenDamaged -= EnemyDie;
-    }
+    //private void OnDisable()
+    //{
+    //    //Bomb.enemyHasBeenDamaged -= EnemyDie;
+    //}
     private void Update()
     {
         MoveEnemy();
@@ -59,8 +57,7 @@ public class Enemy : MonoBehaviour
     }
     void EnemyDie()
     {
-        if (GameManager.Get() != null)
-            GameManager.Get().DecreaseAmountEnemies();
+        
     }
     void MoveEnemy()
     {
@@ -120,7 +117,16 @@ public class Enemy : MonoBehaviour
     {
         if (Physics.Raycast(forwardRay, out myHitForward, maxDistanceRaycasts))
         {
-            if (myHitForward.collider.tag == "Player")
+            if (myHitForward.collider.tag != "Player")
+            {
+                //if (myHitForward.collider.tag == "Enemy")
+                //{
+                //    //Vector3 roundedPosition = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
+                //    //transform.position = roundedPosition;
+                //    newPosition *= -1;
+                //}
+            }
+            else
                 playerDamaged?.Invoke();
         }
     }

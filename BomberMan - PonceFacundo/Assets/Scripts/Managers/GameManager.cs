@@ -52,9 +52,9 @@ public class GameManager : MonoBehaviour
     }
     public void DecreaseAmountEnemies()
     {
-        amountEnemies -= 1;
-
-        if(amountEnemies <= 0)
+        amountEnemies--;
+            
+        if (amountEnemies <= 0)
         {
             amountEnemies = 0;
             theDoorIsOpen?.Invoke();

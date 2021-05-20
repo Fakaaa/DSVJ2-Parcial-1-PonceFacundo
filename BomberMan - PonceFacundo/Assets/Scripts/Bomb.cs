@@ -13,8 +13,8 @@ public class Bomb : MonoBehaviour
     public delegate void PlayerReciveDamage();
     public static PlayerReciveDamage playerHasBeenDamaged;
 
-    public delegate void EnemyHasDie();
-    public static EnemyHasDie enemyHasBeenDamaged;
+    //public delegate void EnemyHasDie();
+    //public static EnemyHasDie enemyHasBeenDamaged;
 
     public delegate void TheBombExplode();
     public static TheBombExplode bombExplode;
@@ -40,8 +40,11 @@ public class Bomb : MonoBehaviour
     private RaycastHit backHit;
     private RaycastHit leftHit;
     private RaycastHit rightHit;
+
+    int ghostHited;
     public void Awake()
     {
+        ghostHited = 0;
         hitLeft = false;
         hitFront = false;
         hitBack = false;
@@ -129,15 +132,20 @@ public class Bomb : MonoBehaviour
             distanceBetweenBombAndImpact = (int)Vector3.Distance(transform.position, hitInfo.collider.gameObject.transform.position);
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
-                if (hitInfo.collider.tag == "Enemy")
-                    enemyHasBeenDamaged?.Invoke();
+                if (ghostHited == 0 && hitInfo.collider.tag == "Enemy")
+                {
+                    if (GameManager.Get() != null)
+                        GameManager.Get().DecreaseAmountEnemies();
+                    ghostHited = 1;
+                }
+
                 Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position , dirInstance);
 
                 for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
                 {
                     Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position - (direction.direction * i), dirInstance);
                 }
-                hitInfo.collider.gameObject.SetActive(false);
+                Destroy(hitInfo.collider.gameObject);
             }
             else if(hitInfo.collider.tag == "Player")
                 playerHasBeenDamaged?.Invoke();

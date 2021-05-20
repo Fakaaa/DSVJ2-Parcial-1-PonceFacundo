@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 2400391088521244482}
   m_Layer: 0
   m_Name: Bomb
-  m_TagString: Untagged
+  m_TagString: Unbreakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -270,7 +270,7 @@ MonoBehaviour:
   timeToExplode: 1
   timer: 0
   isActive: 0
-  radiusExplode: 5
+  radiusExplode: 2
   prefabExplosion: {fileID: 2632573240618392901, guid: 89de84f39dc661449af71895697c422c,
     type: 3}
 --- !u!1 &7146198521668416484
