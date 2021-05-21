@@ -30,11 +30,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool canGoRight;
 
     private float maxDistanceRaycasts;
+    private int widthTile;
     [SerializeField] private bool bombPlaced;
     void Start()
     {
+        widthTile = 1;
         maxDistanceRaycasts = 0.8f;
-        transform.position = new Vector3(CreateMap.scaleFloorX - (CreateMap.scaleFloorX-2), 0.2f, CreateMap.scaleFloorY - (CreateMap.scaleFloorY-2));
+        transform.position = new Vector3(CreateMap.scaleFloorX - (CreateMap.scaleFloorX- widthTile), 0.2f, CreateMap.scaleFloorY - (CreateMap.scaleFloorY- widthTile));
         moveVec = Vector3.zero;
         canGoFront = true;
         canGoBack = true;

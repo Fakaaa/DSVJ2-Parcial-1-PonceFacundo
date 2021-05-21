@@ -17,6 +17,11 @@ public class CreateMap : MonoBehaviour
     [SerializeField] public GameObject refDoorPrefab;
     [SerializeField] public GameObject refEnemy;
 
+    [SerializeField] public GameObject spawnerLocation1;
+    [SerializeField] public GameObject spawnerLocation2;
+    [SerializeField] public GameObject spawnerLocation3;
+    [SerializeField] public GameObject spawnerLocation4;
+
     private GameObject floor;
     private GameObject[,] wallsCenterMap;
     private GameObject[] wallsOuterMap;
@@ -28,9 +33,13 @@ public class CreateMap : MonoBehaviour
     public static float scaleFloorY;
 
     public bool doorPlaced;
+    private float heightSpawn;
+    private int offsetSpawn;
 
     public void Start()
     {
+        heightSpawn = 0.2f;
+        offsetSpawn = 2;
         doorPlaced = false;
         offsetBetweenWalls = 2.0f;
         wallsCenterMap = new GameObject[maxWidth, maxHeight];
@@ -40,6 +49,11 @@ public class CreateMap : MonoBehaviour
         scaleFloorX = maxWidth;
         scaleFloorY = maxHeight;
 
+        spawnerLocation1.transform.position = new Vector3(scaleFloorX * 0.5f, heightSpawn, scaleFloorY * 0.5f);
+        spawnerLocation2.transform.position = new Vector3(scaleFloorX - (scaleTileXWalls + offsetSpawn), heightSpawn, (scaleTileZWalls + offsetSpawn));
+        spawnerLocation3.transform.position = new Vector3((scaleTileXWalls + offsetSpawn), heightSpawn, scaleFloorY - (scaleTileZWalls + offsetSpawn));
+        spawnerLocation4.transform.position = new Vector3(scaleFloorX - (scaleTileXWalls + offsetSpawn), heightSpawn, scaleFloorY - (scaleTileZWalls + offsetSpawn));
+
         Vector3 initialPos = new Vector3(0.0f, -0.5f, 0.0f);
         float offsetOuterMap = 1.0f;
 
@@ -48,13 +62,13 @@ public class CreateMap : MonoBehaviour
         wallsOuterMap[0].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(scaleFloorX * 0.5f, 1);
 
         wallsOuterMap[1] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX * 0.5f, 0.5f, scaleFloorY), refFloor.transform.localRotation, transform);
-        wallsOuterMap[1].transform.localScale = new Vector3(scaleFloorX-offsetOuterMap, 1, 1);
+        wallsOuterMap[1].transform.localScale = new Vector3(scaleFloorX - offsetOuterMap, 1, 1);
         wallsOuterMap[1].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(scaleFloorX * 0.5f, 1);
 
         wallsOuterMap[2] = Instantiate(refWallUnBreakable, new Vector3(0.0f, 0.5f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
         wallsOuterMap[2].transform.localScale = new Vector3(1, scaleFloorY, 1);
         wallsOuterMap[2].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1, scaleFloorY * 0.5f);
-        
+
         wallsOuterMap[3] = Instantiate(refWallUnBreakable, new Vector3(scaleFloorX, 0.5f, scaleFloorY * 0.5f), refFloor.transform.localRotation, transform);
         wallsOuterMap[3].transform.localScale = new Vector3(1, scaleFloorY, 1);
         wallsOuterMap[3].gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1, scaleFloorY * 0.5f);
@@ -68,7 +82,7 @@ public class CreateMap : MonoBehaviour
             {
                 Vector3 posWallUnbreakable = new Vector3((initialPos.x + (i * scaleTileXWalls)) * offsetBetweenWalls, 0.5f,
                     (initialPos.z + (j * scaleTileZWalls)) * offsetBetweenWalls);
-                wallsCenterMap[i,j] = Instantiate(refWallUnBreakable, posWallUnbreakable, refFloor.transform.localRotation, transform);
+                wallsCenterMap[i, j] = Instantiate(refWallUnBreakable, posWallUnbreakable, refFloor.transform.localRotation, transform);
 
                 FindPlaceWallsBreakable(ref posWallUnbreakable, ref anotherRandIter, ref randIteration, i, j);
             }
@@ -103,7 +117,7 @@ public class CreateMap : MonoBehaviour
             else
             {
                 if (((posWallUnbreakable.x + scaleTileXWalls) != (scaleFloorX * 0.5f) && (posWallUnbreakable.z) != (scaleFloorY * 0.5f)) &&
-                    (posWallUnbreakable.x + scaleTileXWalls) != maxWidth && (posWallUnbreakable.z + scaleTileZWalls) != maxHeight )
+                    (posWallUnbreakable.x + scaleTileXWalls) != maxWidth && (posWallUnbreakable.z + scaleTileZWalls) != maxHeight)
                     posWallBreakable = new Vector3(posWallUnbreakable.x + scaleTileXWalls, 0.5f, posWallUnbreakable.z);
                 else
                     return;
@@ -111,12 +125,12 @@ public class CreateMap : MonoBehaviour
 
             if (!doorPlaced)
             {
-                if(randomPlaceBomb > 90)
+                if (randomPlaceBomb > 90)
                 {
                     wallsCenterMap[i, j] = Instantiate(refDoorPrefab, posWallBreakable, refFloor.transform.localRotation, transform);
                     doorPlaced = true;
                 }
-                if(i == (maxWidth * 0.5f) && j == (maxWidth * 0.5f) && !doorPlaced)
+                if (i == (maxWidth * 0.5f) && j == (maxWidth * 0.5f) && !doorPlaced)
                 {
                     wallsCenterMap[i, j] = Instantiate(refDoorPrefab, posWallBreakable, refFloor.transform.localRotation, transform);
                     doorPlaced = true;
@@ -127,14 +141,31 @@ public class CreateMap : MonoBehaviour
     }
 
     void FindPlaceEnemy()
-    {       
-        if(GameManager.Get()!= null)
+    {
+        if (GameManager.Get() != null)
         {
             for (int i = 0; i < GameManager.Get().GetMaxAmountEnemies(); i++)
             {
-                Vector3 centerMap = new Vector3(scaleFloorX * 0.5f, 0.3f, scaleFloorY * 0.5f);
-                GameObject go = Instantiate(refEnemy, centerMap, Quaternion.identity);
-                if(GameManager.Get().GetActualAmountEnemies() < GameManager.Get().GetMaxAmountEnemies())
+                Vector3 randomPos = Vector3.zero;
+                int randSpawner = Random.Range(0, 4);
+
+                switch (randSpawner)
+                {
+                    case 0:
+                        randomPos = spawnerLocation1.transform.position;
+                        break;
+                    case 1:
+                        randomPos = spawnerLocation2.transform.position;
+                        break;
+                    case 2:
+                        randomPos = spawnerLocation3.transform.position;
+                        break;
+                    case 3:
+                        randomPos = spawnerLocation4.transform.position;
+                        break;
+                }
+                GameObject go = Instantiate(refEnemy, randomPos, Quaternion.identity);
+                if (GameManager.Get().GetActualAmountEnemies() < GameManager.Get().GetMaxAmountEnemies())
                     GameManager.Get().IncreaseAmountEnemies();
             }
         }

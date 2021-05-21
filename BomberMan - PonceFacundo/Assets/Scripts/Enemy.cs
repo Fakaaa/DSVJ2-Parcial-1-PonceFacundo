@@ -24,15 +24,24 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float maxDelayRotate;
     [SerializeField] List<Vector3> positions;
 
-    private bool isAlive;
     private float enemySpeed;
     void Start()
     {
         if (GameManager.Get() != null)
             enemySpeed = GameManager.Get().GetEnemySpeed();
-        isAlive = true;
         maxDistanceRaycasts = 0.8f;
+
+        //int rand = Random.Range(0, 100);
         newPosition = transform.position + Vector3.forward;
+
+        //if(rand < 25)
+        //    newPosition = transform.position + Vector3.forward;
+        //else if(rand > 25 && rand < 50)
+        //    newPosition = transform.position + Vector3.back;
+        //else if(rand > 50 && rand < 75)
+        //    newPosition = transform.position + Vector3.right;
+        //else if(rand > 75 && rand < 100)
+        //    newPosition = transform.position + Vector3.left;
     }
     private void Update()
     {
