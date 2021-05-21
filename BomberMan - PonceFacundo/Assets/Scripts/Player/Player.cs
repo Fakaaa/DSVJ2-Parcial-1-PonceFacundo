@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)) && actualAmountBombs < maxAmountBombs)
         {
             actualAmountBombs++;
+            if (GameManager.Get() != null)
+                GameManager.Get().IncreaseAmountBombsPlacedInGame();
             prefabBomb.GetComponent<Bomb>().radiusExplode = radiusMyBombs;
             Instantiate(prefabBomb, transform.position, Quaternion.identity);
             passMyDataToTheUI?.Invoke();

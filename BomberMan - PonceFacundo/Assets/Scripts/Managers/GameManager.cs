@@ -25,11 +25,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int amountEnemies;
     [SerializeField] private int maxEnemies;
     [SerializeField] public float timeGame;
+    [SerializeField] public int amountBombsPlaced;
     [SerializeField][Range(1,5)] 
     public float enemySpeed;
     [Header("PLAYER SCORE")]
     [Space(30)]
     [SerializeField] public int scorePlayer;
+    [SerializeField] public int enemiesKilled;
     private int auxScore;
     private void Awake()
     {
@@ -41,9 +43,21 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    public void IncreaseAmountBombsPlacedInGame()
+    {
+        amountBombsPlaced++;
+    }
+    public int GetAmountBombsPlacedInGame()
+    {
+        return amountBombsPlaced;
+    }
     public void SetPlayState(PlayerFinalState state)
     {
         playerState = state;
+    }
+    public void SetAmountEnemiesKilled()
+    {
+        enemiesKilled = maxEnemies - amountEnemies;
     }
     public void ResetData()
     {
@@ -55,6 +69,10 @@ public class GameManager : MonoBehaviour
         scorePlayer += score;
         auxScore = scorePlayer;
     }
+    public int GetFinalScore()
+    {
+        return auxScore;
+    }
     public float GetEnemySpeed()
     {
         return enemySpeed;
@@ -62,6 +80,10 @@ public class GameManager : MonoBehaviour
     public float GetPlayerScore()
     {
         return scorePlayer;
+    }
+    public int GetAmountEnemiesKilled()
+    {
+        return enemiesKilled;
     }
     public void EndGame(ref bool playerAlive)
     {
@@ -73,6 +95,8 @@ public class GameManager : MonoBehaviour
             playerState = PlayerFinalState.Defeat;
 
         ResetData();
+
+        SetAmountEnemiesKilled();
 
         StartCoroutine(LoadEndScene());
     }
