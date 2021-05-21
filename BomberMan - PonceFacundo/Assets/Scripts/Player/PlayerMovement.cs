@@ -29,6 +29,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool canGoLeft;
     [SerializeField] private bool canGoRight;
 
+    public bool inputAviable;
+
     private float maxDistanceRaycasts;
     private int widthTile;
     [SerializeField] private bool bombPlaced;
@@ -96,14 +98,19 @@ public class PlayerMovement : MonoBehaviour
     }
     public void InputPlayer()
     {
-        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && canGoBack)
-            ApplyDirection(transform.position.z, -1, MoveDirection.Back);
-        else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && canGoFront)
-            ApplyDirection(transform.position.z, 1, MoveDirection.Front);
-        else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && canGoLeft)
-            ApplyDirection(transform.position.x, -1, MoveDirection.Left);
-        else if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && canGoRight)
-            ApplyDirection(transform.position.x, 1, MoveDirection.Right);
+        if(inputAviable)
+        {
+            if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && canGoBack)
+                ApplyDirection(transform.position.z, -1, MoveDirection.Back);
+            else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && canGoFront)
+                ApplyDirection(transform.position.z, 1, MoveDirection.Front);
+            else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && canGoLeft)
+                ApplyDirection(transform.position.x, -1, MoveDirection.Left);
+            else if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && canGoRight)
+                ApplyDirection(transform.position.x, 1, MoveDirection.Right);
+            else
+                moveVec = Vector3.zero;
+        }
         else
             moveVec = Vector3.zero;
 

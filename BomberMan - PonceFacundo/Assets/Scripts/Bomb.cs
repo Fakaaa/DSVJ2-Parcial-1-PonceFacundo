@@ -14,6 +14,9 @@ public class Bomb : MonoBehaviour
     public delegate void TheBombExplode();
     public static TheBombExplode bombExplode;
 
+    public delegate void TheBombExplodeAndHitEnemy();
+    public static TheBombExplodeAndHitEnemy bombHitEnemy;
+
     private float timeTodestroyTrashObj;
     private float timerTrashObj;
 
@@ -147,11 +150,7 @@ public class Bomb : MonoBehaviour
             {
                 if (ghostHited == 0 && hitInfo.collider.tag == "Enemy")
                 {
-                    if (GameManager.Get() != null)
-                    {
-                        GameManager.Get().DecreaseAmountEnemies();
-                        GameManager.Get().SetPlayerScore(100);
-                    }
+                    bombHitEnemy?.Invoke();
                     ghostHited = 1;
                 }
 

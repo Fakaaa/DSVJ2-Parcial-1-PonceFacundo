@@ -11,14 +11,20 @@ public class Player : MonoBehaviour
     [SerializeField] public GameObject prefabBomb;
 
     public delegate void ResetAfterDie();
-    public static ResetAfterDie playerHasDie;
+    public static ResetAfterDie resetCameraAfterDie;
 
     public delegate void PassInfoUI();
     public PassInfoUI passMyDataToTheUI;
 
+    private PlayerMovement myRefMovement;
+    [SerializeField] private float timeInputDisaibleAfterSpawn;
+    private float timer;
+
     public void Start()
     {
+        myRefMovement = gameObject.GetComponent<PlayerMovement>();
         prefabBomb.GetComponent<Bomb>().radiusExplode = radiusMyBombs;
+
         Bomb.playerHasBeenDamaged += ReciveDamage;
         Bomb.bombExplode += BombHasExplode;
         Enemy.playerDamaged += ReciveDamage;
@@ -32,6 +38,11 @@ public class Player : MonoBehaviour
     }
     public void Update()
     {
+        if (timer <= timeInputDisaibleAfterSpawn)
+            timer += Time.deltaTime;
+        else
+            myRefMovement.inputAviable = true;
+
         PlaceBomb();
     }
     public void PlaceBomb()
@@ -52,13 +63,21 @@ public class Player : MonoBehaviour
         actualAmountBombs--;
         passMyDataToTheUI?.Invoke();
     }
-
+    public void ResetPosAfterDie()
+    {
+        timer = 0;
+        transform.position = new Vector3(CreateMap.scaleFloorX - (CreateMap.scaleFloorX - 2), 0.2f, CreateMap.scaleFloorY - (CreateMap.scaleFloorY - 2));
+    }
     public void ReciveDamage()
     {
         lifes--;
 
-        playerHasDie?.Invoke();
-        transform.position = new Vector3(CreateMap.scaleFloorX - (CreateMap.scaleFloorX - 2), 0.2f, CreateMap.scaleFloorY - (CreateMap.scaleFloorY - 2));
+        myRefMovement.inputAviable = false;
+
+        resetCameraAfterDie?.Invoke();
+
+        ResetPosAfterDie();
+
         passMyDataToTheUI?.Invoke();
 
         if (lifes <= 0)

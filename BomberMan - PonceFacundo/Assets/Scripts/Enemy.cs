@@ -22,11 +22,12 @@ public class Enemy : MonoBehaviour
     private RaycastHit myHitRight;
     private float maxDistanceRaycasts;
 
-    [SerializeField] private float minDelayRotate;
-    [SerializeField] private float maxDelayRotate;
     [SerializeField] List<Vector3> positions;
 
     private Vector3 auxPosition;
+
+    [SerializeField] private float timerPerHit;
+    private float delayAttack;
 
     private float enemySpeed;
     void Start()
@@ -36,6 +37,11 @@ public class Enemy : MonoBehaviour
         maxDistanceRaycasts = 0.8f;
         newPosition = transform.position + Vector3.forward;
         auxPosition = newPosition;
+        Bomb.bombHitEnemy += EnemyDied;
+    }
+    private void OnDisable()
+    {
+        Bomb.bombHitEnemy -= EnemyDied;
     }
     private void Update()
     {
@@ -69,6 +75,14 @@ public class Enemy : MonoBehaviour
 
         if (PosReached())
             CheckNewPositions();
+    }
+    public void EnemyDied()
+    {
+        if (GameManager.Get() != null)
+        {
+            GameManager.Get().DecreaseAmountEnemies();
+            GameManager.Get().SetPlayerScore(100);
+        }
     }
     bool PosReached()
     {
@@ -115,10 +129,18 @@ public class Enemy : MonoBehaviour
     }
     void CheckRaycastPlayer()
     {
-        if (Physics.Raycast(forwardRay, out myHitForward, maxDistanceRaycasts))
+        if (delayAttack <= timerPerHit)
+            delayAttack += Time.deltaTime;
+        else
         {
-            if (myHitForward.collider.tag == "Player")
-                playerDamaged?.Invoke();
+            if (Physics.Raycast(forwardRay, out myHitForward, maxDistanceRaycasts))
+            {
+                if (myHitForward.collider.tag == "Player")
+                {
+                    playerDamaged?.Invoke();
+                    delayAttack = 0;
+                }
+            }
         }
     }
     void CheckRaycastEnemy()

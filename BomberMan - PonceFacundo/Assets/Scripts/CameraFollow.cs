@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -16,15 +15,29 @@ public class CameraFollow : MonoBehaviour
         
     private void Awake()
     {
-        Player.playerHasDie += LookAtPlayer;
+        Player.resetCameraAfterDie += LookAtPlayerAfterDeath;
         lookAtPlayer = false;
     }
     private void OnDisable()
     {
-        Player.playerHasDie -= LookAtPlayer;
+        Player.resetCameraAfterDie -= LookAtPlayerAfterDeath;
+    }
+    IEnumerator FindPlayerAfterDeath()
+    {
+        yield return new WaitForSeconds(3);
+    }
+    public void LookAtPlayerAfterDeath()
+    {
+        Debug.Log("Entro");
+
+        StartCoroutine(FindPlayerAfterDeath());
+
+        transform.LookAt(lookAtThat, lookAtThat.up);
     }
     public void LookAtPlayer()
     {
+        StartCoroutine(FindPlayerAfterDeath());
+
         transform.LookAt(lookAtThat, lookAtThat.up);
     }
     void LateUpdate()

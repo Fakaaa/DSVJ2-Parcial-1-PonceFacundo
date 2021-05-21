@@ -618,13 +618,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 913bf942072bcd34ebf1df49ee64d8cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpeed: 5
   timeUntilChangeDirection: 5
   refRaycastPos: {fileID: 7846796146335280957}
   newPosition: {x: 0, y: 0, z: 0}
-  minDelayRotate: 5
-  maxDelayRotate: 10
   positions: []
+  timerPerHit: 3
 --- !u!136 &9222203598527186210
 CapsuleCollider:
   m_ObjectHideFlags: 0
