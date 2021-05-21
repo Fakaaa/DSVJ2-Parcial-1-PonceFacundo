@@ -56,7 +56,7 @@ public class Enemy : MonoBehaviour
     {
         UpdateRays();
 
-        CheckRaycast();
+        CheckRaycastPlayer();
 
         transform.position = Vector3.MoveTowards(transform.position, newPosition, enemySpeed * Time.deltaTime);
 
@@ -106,20 +106,11 @@ public class Enemy : MonoBehaviour
             transform.LookAt(newPosition);
         }
     }
-    void CheckRaycast()
+    void CheckRaycastPlayer()
     {
         if (Physics.Raycast(forwardRay, out myHitForward, maxDistanceRaycasts))
         {
-            if (myHitForward.collider.tag != "Player")
-            {
-                //if (myHitForward.collider.tag == "Enemy")
-                //{
-                //    //Vector3 roundedPosition = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
-                //    //transform.position = roundedPosition;
-                //    newPosition *= -1;
-                //}
-            }
-            else
+            if (myHitForward.collider.tag == "Player")
                 playerDamaged?.Invoke();
         }
     }
