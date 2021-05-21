@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
 
     private RaycastHit myHitForward;
     private Ray forwardRay;
+    private Ray enemyCheckRay;
+    private RaycastHit iHitAnEnemy;
     private Ray leftRay;
     private RaycastHit myHitLeft;
     private Ray rightRay;
@@ -24,24 +26,16 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float maxDelayRotate;
     [SerializeField] List<Vector3> positions;
 
+    private Vector3 auxPosition;
+
     private float enemySpeed;
     void Start()
     {
         if (GameManager.Get() != null)
             enemySpeed = GameManager.Get().GetEnemySpeed();
         maxDistanceRaycasts = 0.8f;
-
-        //int rand = Random.Range(0, 100);
         newPosition = transform.position + Vector3.forward;
-
-        //if(rand < 25)
-        //    newPosition = transform.position + Vector3.forward;
-        //else if(rand > 25 && rand < 50)
-        //    newPosition = transform.position + Vector3.back;
-        //else if(rand > 50 && rand < 75)
-        //    newPosition = transform.position + Vector3.right;
-        //else if(rand > 75 && rand < 100)
-        //    newPosition = transform.position + Vector3.left;
+        auxPosition = newPosition;
     }
     private void Update()
     {
@@ -52,12 +46,14 @@ public class Enemy : MonoBehaviour
     void DrawRays()
     {
         Debug.DrawRay(forwardRay.origin, forwardRay.direction * maxDistanceRaycasts, Color.cyan);
+        Debug.DrawRay(enemyCheckRay.origin, enemyCheckRay.direction * maxDistanceRaycasts, Color.magenta);
         Debug.DrawRay(rightRay.origin, rightRay.direction * maxDistanceRaycasts, Color.red);
         Debug.DrawRay(leftRay.origin, leftRay.direction * maxDistanceRaycasts, Color.green);
     }
     void UpdateRays()
     {
         forwardRay = new Ray(transform.position, transform.forward);
+        enemyCheckRay = new Ray(transform.position + transform.forward, transform.forward);
         rightRay = new Ray(transform.position, transform.right);
         leftRay = new Ray(transform.position, -transform.right);
     }
@@ -66,6 +62,8 @@ public class Enemy : MonoBehaviour
         UpdateRays();
 
         CheckRaycastPlayer();
+
+        CheckRaycastEnemy();
 
         transform.position = Vector3.MoveTowards(transform.position, newPosition, enemySpeed * Time.deltaTime);
 
@@ -121,6 +119,24 @@ public class Enemy : MonoBehaviour
         {
             if (myHitForward.collider.tag == "Player")
                 playerDamaged?.Invoke();
+        }
+    }
+    void CheckRaycastEnemy()
+    {
+        if (Physics.Raycast(enemyCheckRay, out iHitAnEnemy, maxDistanceRaycasts))
+        {
+            auxPosition = newPosition;
+
+            if (iHitAnEnemy.collider.tag == "Enemy")
+            {
+                Enemy enemyHit = iHitAnEnemy.collider.gameObject.GetComponent<Enemy>();
+
+                if(enemyHit != null)
+                {
+                    newPosition = enemyHit.newPosition;
+                    enemyHit.newPosition = auxPosition;
+                }
+            }
         }
     }
 }
