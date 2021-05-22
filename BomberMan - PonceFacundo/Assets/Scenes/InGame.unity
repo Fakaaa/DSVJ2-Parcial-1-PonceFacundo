@@ -1956,7 +1956,7 @@ PrefabInstance:
     - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: radiusMyBombs
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b149ccec57c1014581e0a021fa509c0, type: 3}
