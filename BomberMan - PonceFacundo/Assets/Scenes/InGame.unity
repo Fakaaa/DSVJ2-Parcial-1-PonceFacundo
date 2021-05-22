@@ -1906,7 +1906,7 @@ PrefabInstance:
     - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: lifes
-      value: 100
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
@@ -1922,12 +1922,12 @@ PrefabInstance:
     - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: radiusMyBombs
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}
       propertyPath: maxAmountBombs
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5978901034026346513, guid: 4b149ccec57c1014581e0a021fa509c0,
         type: 3}

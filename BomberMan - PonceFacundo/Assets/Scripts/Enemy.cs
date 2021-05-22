@@ -37,11 +37,6 @@ public class Enemy : MonoBehaviour
         maxDistanceRaycasts = 0.8f;
         newPosition = transform.position + Vector3.forward;
         auxPosition = newPosition;
-        Bomb.bombHitEnemy += EnemyDied;
-    }
-    private void OnDisable()
-    {
-        Bomb.bombHitEnemy -= EnemyDied;
     }
     private void Update()
     {
@@ -82,6 +77,7 @@ public class Enemy : MonoBehaviour
         {
             GameManager.Get().DecreaseAmountEnemies();
             GameManager.Get().SetPlayerScore(100);
+            Destroy(gameObject);
         }
     }
     bool PosReached()

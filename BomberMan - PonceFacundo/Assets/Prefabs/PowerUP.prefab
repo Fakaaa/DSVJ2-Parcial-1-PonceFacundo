@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myAnim: 1
-  speedRotation: 10
+  speedRotation: 40
 --- !u!114 &8592460969667720288
 MonoBehaviour:
   m_ObjectHideFlags: 0

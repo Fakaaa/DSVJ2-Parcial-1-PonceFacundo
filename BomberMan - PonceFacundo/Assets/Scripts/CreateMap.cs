@@ -164,7 +164,7 @@ public class CreateMap : MonoBehaviour
                         randomPos = spawnerLocation4.transform.position;
                         break;
                 }
-                GameObject go = Instantiate(refEnemy, randomPos, Quaternion.identity);
+                Instantiate(refEnemy, randomPos, Quaternion.identity);
                 if (GameManager.Get().GetActualAmountEnemies() < GameManager.Get().GetMaxAmountEnemies())
                     GameManager.Get().IncreaseAmountEnemies();
             }

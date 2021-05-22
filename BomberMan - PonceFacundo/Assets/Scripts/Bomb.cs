@@ -14,9 +14,6 @@ public class Bomb : MonoBehaviour
     public delegate void TheBombExplode();
     public static TheBombExplode bombExplode;
 
-    public delegate void TheBombExplodeAndHitEnemy();
-    public static TheBombExplodeAndHitEnemy bombHitEnemy;
-
     private float timeTodestroyTrashObj;
     private float timerTrashObj;
 
@@ -27,7 +24,6 @@ public class Bomb : MonoBehaviour
     private float timeUntilExplosionActiveFalse;
 
     private bool isTrigger;
-
     private bool partyclesAlreadyActive;
 
     private bool hitLeft;
@@ -44,14 +40,38 @@ public class Bomb : MonoBehaviour
     private RaycastHit leftHit;
     private RaycastHit rightHit;
 
-    int ghostHited;
-    int playerHited;
+    //Funcionan como flags o bools
+    bool ghostHitedRight;
+    bool ghostHitedLeft;
+    bool ghostHitedFront;
+    bool ghostHitedBack;
+    bool playerHited;
+    bool wallHitedLeft;
+    bool wallHitedRight;
+    bool wallHitedFront;
+    bool wallHitedBack;
+    bool pointsGivedFront;
+    bool pointsGivedBack;
+    bool pointsGivedLeft;
+    bool pointsGivedRight;
     public void Awake()
     {
         timerExplosionActive = 0;
         timeUntilExplosionActiveFalse = 1;
-        ghostHited = 0;
-        playerHited = 0;
+        ghostHitedRight = false;
+        ghostHitedLeft = false;
+        ghostHitedFront = false;
+        ghostHitedBack = false;
+        playerHited = false;
+        wallHitedLeft = false;
+        wallHitedRight = false;
+        wallHitedFront = false;
+        wallHitedBack = false;
+        pointsGivedFront = false;
+        pointsGivedBack = false;
+        pointsGivedLeft = false;
+        pointsGivedRight = false;
+
         partyclesAlreadyActive = false;
         hitLeft = false;
         hitFront = false;
@@ -92,10 +112,18 @@ public class Bomb : MonoBehaviour
                     leftRay = new Ray(transform.position, -transform.right);
                     rightRay = new Ray(transform.position, transform.right);
 
-                    DestroyWithRadius(ref frontRay, ref frontHit, ref hitFront, new Quaternion(0, 5, 1, 1));
-                    DestroyWithRadius(ref backRay, ref backHit, ref hitBack, new Quaternion(-1, 5, 0, 1));
-                    DestroyWithRadius(ref leftRay, ref leftHit, ref hitLeft, new Quaternion(1, 5, 0, 1));
-                    DestroyWithRadius(ref rightRay, ref rightHit, ref hitRight, new Quaternion(0, -5, -1, 1));
+                    DestroyWithRadius(ref frontRay, ref frontHit, ref hitFront, new Quaternion(0, 5, 1, 1),
+                        ref ghostHitedFront, ref wallHitedFront, ref pointsGivedFront);
+
+                    DestroyWithRadius(ref backRay, ref backHit, ref hitBack, new Quaternion(-1, 5, 0, 1),
+                        ref ghostHitedBack, ref wallHitedBack, ref pointsGivedBack);
+
+                    DestroyWithRadius(ref leftRay, ref leftHit, ref hitLeft, new Quaternion(1, 5, 0, 1),
+                        ref ghostHitedLeft, ref wallHitedLeft, ref pointsGivedLeft);
+
+                    DestroyWithRadius(ref rightRay, ref rightHit, ref hitRight, new Quaternion(0, -5, -1, 1),
+                        ref ghostHitedRight, ref wallHitedRight, ref pointsGivedRight);
+
                     CenterExplosion();
 
                     if (timerExplosionActive <= timeUntilExplosionActiveFalse)
@@ -137,7 +165,63 @@ public class Bomb : MonoBehaviour
         Debug.DrawRay(leftRay.origin, leftRay.direction * radiusExplode, Color.blue);
         Debug.DrawRay(rightRay.origin, rightRay.direction * radiusExplode, Color.green);
     }
-    public void DestroyWithRadius(ref Ray direction, ref RaycastHit hitInfo, ref bool hitThatSide, Quaternion dirInstance)
+
+    private void KillEnemyGhost(ref RaycastHit hitInfo, ref bool hitFlagEnemy)
+    {
+        if (!hitFlagEnemy && hitInfo.collider.tag == "Enemy")
+        {
+            hitInfo.collider.gameObject.GetComponent<Enemy>().EnemyDied();
+            hitFlagEnemy = true;
+        }
+    }
+
+    private void KillPlayer()
+    {
+        playerHasBeenDamaged?.Invoke();
+        playerHited = true;
+    }
+
+    private void DestroyWallsBreakable(ref RaycastHit hitInfo, ref bool hitFlagWall)
+    {
+        if (hitInfo.collider.tag != "Enemy" && !hitFlagWall)
+        {
+            Destroy(hitInfo.collider.gameObject);
+            hitFlagWall = true;
+        }
+    }
+
+    private void CreateParticlesWhenHit(ref Ray direction, ref RaycastHit hitInfo, Quaternion dirInstance, int distanceBetweenBombAndImpact)
+    {
+        if (!partyclesAlreadyActive)
+            Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position, dirInstance);
+
+        for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
+        {
+            if (!partyclesAlreadyActive)
+                Instantiate(prefabExplosion, hitInfo.point - (direction.direction * i), dirInstance);
+        }
+    }
+
+    private void CreateParticlesDefault(ref Ray direction, Quaternion dirInstance)
+    {
+        for (int i = 1; i <= radiusExplode; i++)
+        {
+            if (!partyclesAlreadyActive)
+                Instantiate(prefabExplosion, transform.position + (direction.direction * i), dirInstance);
+        }
+    }
+
+    private void GivePlayerPointsAfterDestroy(ref bool pointsSide)
+    {
+        if (GameManager.Get() != null && !pointsSide)
+        {
+            GameManager.Get().SetPlayerScore(50);
+            pointsSide = true;
+        }
+    }
+
+    public void DestroyWithRadius(ref Ray direction, ref RaycastHit hitInfo, ref bool hitThatSide,
+        Quaternion dirInstance, ref bool hitFlagEnemy, ref bool hitFlagWall, ref bool pointsSide)
     {
         int distanceBetweenBombAndImpact;
 
@@ -148,40 +232,21 @@ public class Bomb : MonoBehaviour
 
             if (hitInfo.collider.tag != "Unbreakable" && hitInfo.collider.tag != "Player")
             {
-                if (ghostHited == 0 && hitInfo.collider.tag == "Enemy")
-                {
-                    bombHitEnemy?.Invoke();
-                    ghostHited = 1;
-                }
 
-                if (GameManager.Get() != null)
-                    GameManager.Get().SetPlayerScore(50);
+                KillEnemyGhost(ref hitInfo, ref hitFlagEnemy);
 
-                if (!partyclesAlreadyActive)
-                    Instantiate(prefabExplosion, hitInfo.collider.gameObject.transform.position, dirInstance);
+                GivePlayerPointsAfterDestroy(ref pointsSide);
 
-                for (int i = 1; i <= distanceBetweenBombAndImpact; i++)
-                {
-                    if (!partyclesAlreadyActive)
-                        Instantiate(prefabExplosion, hitInfo.point - (direction.direction * i), dirInstance);
-                }
+                CreateParticlesWhenHit(ref direction, ref hitInfo, dirInstance, distanceBetweenBombAndImpact);
 
-                Destroy(hitInfo.collider.gameObject);
+                DestroyWallsBreakable(ref hitInfo, ref hitFlagWall);
+
             }
-            else if (hitInfo.collider.tag == "Player" && playerHited == 0)
-            {
-                playerHasBeenDamaged?.Invoke();
-                playerHited = 1;
-            }
+            else if (hitInfo.collider.tag == "Player" && !playerHited)
+                KillPlayer();
         }
         else
-        {
-            for (int i = 1; i <= radiusExplode; i++)
-            {
-                if (!partyclesAlreadyActive)
-                    Instantiate(prefabExplosion, transform.position + (direction.direction * i), dirInstance);
-            }
-        }
+            CreateParticlesDefault(ref direction, dirInstance);
 
         DrawRaysOnDebug();
     }
