@@ -77,7 +77,9 @@ public class Bomb : MonoBehaviour
         hitFront = false;
         hitBack = false;
         hitRight = false;
+
         isTrigger = true;
+
         isActive = true;
         gameObject.GetComponent<SphereCollider>().isTrigger = true;
         Vector3 posCentred = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
@@ -183,7 +185,7 @@ public class Bomb : MonoBehaviour
 
     private void DestroyWallsBreakable(ref RaycastHit hitInfo, ref bool hitFlagWall)
     {
-        if (hitInfo.collider.tag != "Enemy" && !hitFlagWall)
+        if (hitInfo.collider.tag != "Enemy" && hitInfo.collider.tag != "Bomb" && !hitFlagWall)
         {
             Destroy(hitInfo.collider.gameObject);
             hitFlagWall = true;
@@ -220,6 +222,22 @@ public class Bomb : MonoBehaviour
         }
     }
 
+    public void DetoneBomb(ref RaycastHit hitInfo)
+    {
+        Bomb aux = hitInfo.collider.gameObject.GetComponent<Bomb>();
+
+        if (hitInfo.collider.tag == "Bomb")
+        {
+            if(aux != null)
+            {
+                aux.isTrigger = false;
+                aux.timer = aux.timeToExplode+1;
+                Debug.Log(aux.timer);
+                Debug.Log("Entro a la bomba");
+            }
+        }
+    }
+
     public void DestroyWithRadius(ref Ray direction, ref RaycastHit hitInfo, ref bool hitThatSide,
         Quaternion dirInstance, ref bool hitFlagEnemy, ref bool hitFlagWall, ref bool pointsSide)
     {
@@ -234,6 +252,8 @@ public class Bomb : MonoBehaviour
             {
 
                 KillEnemyGhost(ref hitInfo, ref hitFlagEnemy);
+
+                DetoneBomb(ref hitInfo);
 
                 GivePlayerPointsAfterDestroy(ref pointsSide);
 

@@ -28,8 +28,6 @@ public class CameraFollow : MonoBehaviour
     }
     public void LookAtPlayerAfterDeath()
     {
-        Debug.Log("Entro");
-
         StartCoroutine(FindPlayerAfterDeath());
 
         transform.LookAt(lookAtThat, lookAtThat.up);
