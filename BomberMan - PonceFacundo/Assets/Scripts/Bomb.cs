@@ -262,7 +262,7 @@ public class Bomb : MonoBehaviour
                 DestroyWallsBreakable(ref hitInfo, ref hitFlagWall);
 
             }
-            else if (hitInfo.collider.tag == "Player" && !playerHited)
+            else if (hitInfo.collider.tag == "Player" && !playerHited && !hitFlagWall)
                 KillPlayer();
         }
         else
